@@ -30,8 +30,7 @@
     .input-section,
     .result-section,
     .position,
-    .idolResult,
-    .environmentSettings {
+    .idolResult {
         background-color: rgb(36, 36, 38);
         margin: 1vw 0;
         padding: 5px 10px;
@@ -105,16 +104,11 @@
     }
 
     .position,
-    .idolResult,
-    .environmentSettings {
+    .idolResult {
         margin: 0.25vw;
         padding: 10px;
         border: 2px rgba(112, 112, 112, 0.5) solid;
         flex-direction: column;
-    }
-
-    .environmentSettings {
-        width: 50%;
     }
 
     .position,
@@ -142,8 +136,7 @@
         .input-section,
         .result-section,
         .position,
-        .idolResult,
-        .environmentSettings {
+        .idolResult {
             box-sizing: border-box;
             margin: 7.5px 0;
             width: 100%;
@@ -175,17 +168,6 @@
                 <div class="position" id="Leader">
                     <h3>Leader</h3>
                     <div>
-                        <label>思い出レベル:
-                            <select id="leBomLevel">
-                                <option value="0">Lv.1</option>
-                                <option value="0.02" selected>Lv.2</option>
-                                <option value="0.03">Lv.3</option>
-                                <option value="0.05">Lv.4</option>
-                                <option value="0.075">Lv.5</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div>
                         <div><label>Vo: <input type="number" id="leader-vo" value="1390"></label></div>
                         <div><label>Da: <input type="number" id="leader-da" value="630"></label></div>
                         <div><label>Vi: <input type="number" id="leader-vi" value="658"></label></div>
@@ -201,17 +183,6 @@
                 <!-- Vocal -->
                 <div class="position" id="Vocal">
                     <h3>Vocal担当</h3>
-                    <div>
-                        <label>思い出レベル:
-                            <select id="voBomLevel">
-                                <option value="0">Lv.1</option>
-                                <option value="0.02" selected>Lv.2</option>
-                                <option value="0.03">Lv.3</option>
-                                <option value="0.05">Lv.4</option>
-                                <option value="0.075">Lv.5</option>
-                            </select>
-                        </label>
-                    </div>
                     <div>
                         <div><label>Vo: <input type="number" id="vocal-vo" value="3114"></label></div>
                         <div><label>Da: <input type="number" id="vocal-da" value="880"></label></div>
@@ -229,17 +200,6 @@
                 <div class="position" id="Center">
                     <h3>Center</h3>
                     <div>
-                        <label>思い出レベル:
-                            <select id="ceBomLevel">
-                                <option value="0">Lv.1</option>
-                                <option value="0.02" selected>Lv.2</option>
-                                <option value="0.03">Lv.3</option>
-                                <option value="0.05">Lv.4</option>
-                                <option value="0.075">Lv.5</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div>
                         <div><label>Vo: <input type="number" id="center-vo" value="2650"></label></div>
                         <div><label>Da: <input type="number" id="center-da" value="920"></label></div>
                         <div><label>Vi: <input type="number" id="center-vi" value="918"></label></div>
@@ -255,17 +215,6 @@
                 <!-- Dance -->
                 <div class="position" id="Dance">
                     <h3>Dance担当</h3>
-                    <div>
-                        <label>思い出レベル:
-                            <select id="daBomLevel">
-                                <option value="0">Lv.1</option>
-                                <option value="0.02" selected>Lv.2</option>
-                                <option value="0.03">Lv.3</option>
-                                <option value="0.05">Lv.4</option>
-                                <option value="0.075">Lv.5</option>
-                            </select>
-                        </label>
-                    </div>
                     <div>
                         <div><label>Vo: <input type="number" id="dance-vo" value="2344"></label></div>
                         <div><label>Da: <input type="number" id="dance-da" value="810"></label></div>
@@ -283,17 +232,6 @@
                 <div class="position" id="Visual">
                     <h3>Visual担当</h3>
                     <div>
-                        <label>思い出レベル:
-                            <select id="viBomLevel">
-                                <option value="0">Lv.1</option>
-                                <option value="0.02" selected>Lv.2</option>
-                                <option value="0.03">Lv.3</option>
-                                <option value="0.05">Lv.4</option>
-                                <option value="0.075">Lv.5</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div>
                         <div><label>Vo: <input type="number" id="visual-vo" value="2380"></label></div>
                         <div><label>Da: <input type="number" id="visual-da" value="768"></label></div>
                         <div><label>Vi: <input type="number" id="visual-vi" value="778"></label></div>
@@ -306,62 +244,6 @@
                     <div><label>ユニットボーナス: <input type="checkbox" id="visual-unitBonus"></label></div>
                 </div>
             </div>
-
-            <div class="environmentSettings">
-                <div>
-                    <div><label>ターン数:<input type="number" id="turn" value="1" required>ターン目</label></div>
-                </div>
-                <div>
-                    <div><label>Voバフ:<input type="number" id="voBuff" value="0" required>%</label></div>
-                    <div><label>Daバフ:<input type="number" id="daBuff" value="21" required>%</label></div>
-                    <div><label>Viバフ:<input type="number" id="viBuff" value="61" required>%</label></div>
-                </div>
-
-                <div>
-                    <label>アピール実施者:
-                        <select id="appealExecutor">
-                            <option value="le">Leader</option>
-                            <option value="vo">Vocal</option>
-                            <option value="ce" selected>Center</option>
-                            <option value="da">Dance</option>
-                            <option value="vi">Visual</option>
-                        </select>
-                    </label>
-                </div>
-
-                <div class="sideBySide">
-                    <label>思い出アピール:<input type="checkbox" id="memoryAppeal"></label>
-                    <label>（チャージアピール:<input type="checkbox" id="chargeAppeal">）</label>
-                </div>
-
-                <div><label>アピール倍率（札／思い出アピールの追加効果）:<input type="number" id="appealMultiplier" value="2"
-                            required>倍</label>
-                </div>
-
-
-                <div>
-                    <label>アピール判定係数:
-                        <select id="appealCoefficient" required>
-                            <option value="0.5">通常アピール Bad (0.5)</option>
-                            <option value="1.0">通常アピール Normal (1.0)</option>
-                            <option value="1.1">通常アピール Good (1.1)</option>
-                            <option value="1.5" selected>通常アピール Perfect (1.5)</option>
-                            <option value="1.5">思い出アピール (1.5)</option>
-                        </select>
-                    </label>
-                </div>
-
-                <div>
-                    <label>一致属性:
-                        <select id="attributeMatch" required>
-                            <option value="vo">Vocal</option>
-                            <option value="da">Dance</option>
-                            <option value="vi" selected>Visual</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-        </section>
 
         <section>
             <button onclick="calculateStatus()">計算</button>
