@@ -25,6 +25,15 @@
     main {
         width: 80vw;
         max-width: 1500px;
+        margin: 20px 0;
+    }
+
+    footer {
+        margin: 10px 0;
+    }
+
+    a {
+        color: white;
     }
 
     .input-section,
@@ -38,7 +47,7 @@
     }
 
     button {
-        background-color: #4c56af;
+        background-color: #4144bd;
         color: white;
         margin: 5px 10px 5px 0;
         padding: 10px 20px;
@@ -48,6 +57,7 @@
         font-size: 16px;
     }
 
+    a:hover,
     button:hover {
         opacity: 0.7;
     }
@@ -142,10 +152,12 @@
             width: 100%;
         }
 
+        a:hover,
         button:hover {
             opacity: unset;
         }
 
+        a:hover,
         button:active {
             opacity: 0.7;
         }
@@ -158,7 +170,7 @@
 
 <body>
     <header>
-        <h1>グレフェス計算機 ver. 1.0.0</h1>
+        <h1>グレフェス計算機 ver. 1.0.0 Beta</h1>
     </header>
     <main>
         <section class="input-section">
@@ -299,19 +311,29 @@
         </section>
     </main>
     <footer>
-        <div><a href="https://x.com/w_tsxg" target="_blank">@w_tsxg</a></div>
+        <div>制作: <a href="https://x.com/w_tsxg" target="_blank">@w_tsxg</a></div>
     </footer>
 </body>
 
 <script>
     "use strict";
 
+
     // スーパー変数宣言ゾーン
     const positions = ["Leader", "Vocal", "Center", "Dance", "Visual"];
     const baseStats = ["Vo", "Da", "Vi", "Me"];
+    let adjustedBaseStats = {
+        Leader: { vo: 0, da: 0, vi: 0, me: 0 },
+        Vocal: { vo: 0, da: 0, vi: 0, me: 0 },
+        Center: { vo: 0, da: 0, vi: 0, me: 0 },
+        Dance: { vo: 0, da: 0, vi: 0, me: 0 },
+        Visual: { vo: 0, da: 0, vi: 0, me: 0 }
+    }
+    const numAbilities = 20; // アビリティ選択ドロップダウンメニューの数
+
 
     // ページ読み込み時の処理
-    window.onload = function () {
+    document.addEventListener('DOMContentLoaded', (event) => {
         // 共通のドロップダウンメニュー作成処理
         const abilityOptions = [
             { type: "none", multiplier: "0", value: "なし" },
@@ -319,24 +341,23 @@
             { type: "positionSuitability", multiplier: "0.15", value: "ポジション適正◎" }, // 基礎ポジションボーナスをCenterなら+10%、Vocal/Visual/Dance/Centerなら+15%
             { type: "basePositionBonus", multiplier: "0.05", value: "オールラウンダー〇" }, // 基礎ポジションボーナスを+5%
             { type: "basePositionBonus", multiplier: "0.10", value: "オールラウンダー◎" }, // 基礎ポジションボーナスを+10%
-            { type: "allBaseStatBonus", multiplier: "0.05", value: "スペシャリスト" }, // 全基礎能力へのボーナスを+5%
-            { type: "allBaseStatUp", multiplier: "0.06", value: "基礎能力値UP(+6%)" }, // すべての基礎能力値+6%
+            { type: "allBaseStatsBonus", multiplier: "0.05", value: "スペシャリスト" }, // 全基礎能力へのボーナスを+5%
+            { type: "allBaseStatsUp", multiplier: "0.06", value: "基礎能力値UP（+6%）" }, // すべての基礎能力値+6%
             { type: "roleModel", multiplier: "0.20", value: "ロールモデル" }, // Leaderなら全基礎能力へのボーナスを+20%
-            { type: "allBaseStatBonus", multiplier: "0.01", value: "エキシビションマッチ(ノウハウ)" }, // 全基礎能力へのボーナスを+1%
-            { type: "allBaseStatBonus", multiplier: "0.02", value: "エキシビションマッチ+" }, // 全基礎能力へのボーナスを+2%
-            { type: "allBaseStatBonus", multiplier: "0.03", value: "エキシビションマッチ++" }, // 全基礎能力へのボーナスを+3%
+            { type: "allBaseStatsBonus", multiplier: "0.01", value: "エキシビションマッチ" }, // 全基礎能力へのボーナスを+1%
+            { type: "allBaseStatsBonus", multiplier: "0.02", value: "エキシビションマッチ+" }, // 全基礎能力へのボーナスを+2%
+            { type: "allBaseStatsBonus", multiplier: "0.03", value: "エキシビションマッチ++" }, // 全基礎能力へのボーナスを+3%
             { type: "voBaseStatBonus", multiplier: "0.03", value: "歌唱力のはばたき" }, // Vocalボーナスを+3%
             { type: "daBaseStatBonus", multiplier: "0.03", value: "安定感のきらめき" }, // Danceボーナスを+3%
             { type: "viBaseStatBonus", multiplier: "0.03", value: "表現力のひろがり" }, // Visualボーナスを+3%
-            { type: "allBaseStatBonus", multiplier: "0.03", value: "大いなる一歩" }, // 全基礎能力へのボーナスを+3%
-            { type: "allBaseStatBonus", multiplier: "0.05", value: "ラブレターのAnswer--" }, // 全基礎能力へのボーナスを+5%
-            { type: "allBaseStatBonus", multiplier: "0.03", value: "エントリーライブ" }, // 全基礎能力へのボーナスを+3%
-            { type: "allBaseStatBonus", multiplier: "0.05", value: "エキシビションマッチ(STEP)" }, // 全基礎能力へのボーナスを+5%
-            { type: "allBaseStatUp", multiplier: "0.03", value: "基礎能力値UP(+3%)" }, // すべての基礎能力値+3%
+            { type: "allBaseStatsBonus", multiplier: "0.03", value: "大いなる一歩" }, // 全基礎能力へのボーナスを+3%
+            { type: "allBaseStatsBonus", multiplier: "0.05", value: "ラブレターのAnswer--" }, // 全基礎能力へのボーナスを+5%
+            { type: "allBaseStatsBonus", multiplier: "0.03", value: "エントリーライブ成功" }, // 全基礎能力へのボーナスを+3%
+            { type: "allBaseStatsBonus", multiplier: "0.05", value: "エキシビションマッチ成功" }, // 全基礎能力へのボーナスを+5%
+            { type: "allBaseStatsUp", multiplier: "0.03", value: "基礎能力値UP（+3%）" }, // すべての基礎能力値+3%
         ];
-
         positions.forEach(position => {
-            for (let i = 0; i < 20; i += 1) { // アビリティ選択ドロップダウンメニューの個数を指定
+            for (let i = 0; i < numAbilities; i += 1) {
                 const selectElement = document.createElement("select");
                 selectElement.classList.add(`${position.toLowerCase()}-ability`);
                 selectElement.id = `${position.toLowerCase()}-ability-${i}`;
@@ -352,7 +373,8 @@
                 document.getElementById(`${position.toLowerCase()}-abilities-container`).appendChild(selectElement);
             };
         });
-    };
+    });
+
 
     // 計算処理
     function calculateStatus() {
@@ -385,8 +407,8 @@
                 // アビリティの計算
                 let baseStatIncrease = 0; // 基礎能力値UP系アビリティによる基礎能力値の増加量
                 let basePositionBonusMultiplier = 0; // アビリティによる基礎ポジションボーナス補正値
-                let allBaseStatBonusMultiplier = 0;  // 全基礎能力へのボーナス
-                let specificBaseStatBonusMultiplier = 0; // 特定の基礎能力へのボーナス
+                let allBaseStatsBonusMultiplier = 0;  // アビリティによる全基礎能力へのボーナス
+                let specificBaseStatBonusMultiplier = 0; // アビリティによる特定の基礎能力へのボーナス
 
                 // アビリティを1個ずつ処理
                 document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
@@ -396,7 +418,7 @@
 
                     if (type !== "none") {
                         switch (type) {
-                            case 'allBaseStatUp': // 基礎能力値UP系
+                            case 'allBaseStatsUp': // 基礎能力値UP系
                                 baseStatIncrease += Math.ceil(initialBaseStat * multiplier);
                                 break;
                             case 'basePositionBonus': // 基礎ポジションボーナス
@@ -413,15 +435,15 @@
                                     };
                                 };
                                 break;
-                            case 'allBaseStatBonus': // 全基礎能力へのボーナス
-                                allBaseStatBonusMultiplier += multiplier;
+                            case 'allBaseStatsBonus': // 全基礎能力へのボーナス
+                                allBaseStatsBonusMultiplier += multiplier;
                                 break;
                             case `${baseStat.toLowerCase()}BaseStatBonus`: // 特定の基礎能力へのボーナス
                                 specificBaseStatBonusMultiplier += multiplier;
                                 break;
                             case 'roleModel': // ロールモデルによる全基礎能力へのボーナス
                                 if (position === "Leader") {
-                                    allBaseStatBonusMultiplier += multiplier;
+                                    allBaseStatsBonusMultiplier += multiplier;
                                 }
                                 break;
                         }
@@ -429,7 +451,7 @@
                 });
 
                 // 補正込み最終基礎能力値
-                const adjustedBaseStat = Math.ceil((initialBaseStat + baseStatIncrease) * (1 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus));
+                const adjustedBaseStat = Math.ceil((initialBaseStat + baseStatIncrease) * (1 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatsBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus));
                 document.getElementById(`adjusted-${position.toLowerCase()}-${baseStat.toLowerCase()}`).textContent = `${baseStat}: ${adjustedBaseStat}`;
             });
 
@@ -439,9 +461,10 @@
         console.log('計算終了');
     };
 
+
     // JSONとして保存
     function saveFormData() {        // 確認メッセージを表示
-        const userConfirmed = confirm("この内容でデータを保存しますか？");
+        const userConfirmed = confirm("この内容でデータをファイルに保存しますか？");
 
         if (userConfirmed) {
             // OKが押された場合のみ、データを保存
@@ -482,6 +505,7 @@
         }
     }
 
+
     // JSONを読み込む
     function loadFormData() {
         const fileInput = document.createElement("input");
@@ -500,9 +524,18 @@
                         });
 
                         // アビリティ
-                        for (let i = 0; i < 20; i += 1) {
+                        for (let i = 0; i < numAbilities; i += 1) {
                             const selectBox = document.getElementById(`${position.toLowerCase()}-ability-${i}`);
-                            selectBox.value = data[position].abilities[i];
+                            const abilityValue = data[position].abilities[i];
+
+                            // 選択肢の中に abilityValueが存在するかを確認
+                            const optionExists = Array.from(selectBox.options).some(option => option.value === abilityValue);
+
+                            if (optionExists) {
+                                selectBox.value = abilityValue;
+                            } else {
+                                selectBox.value = "なし";
+                            }
                         };
 
                         // ユニットボーナス
