@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>グレフェス計算機</title>
+</head>
+
+<style>
+    body {
+        margin: 0;
+        font-family: sans-serif;
+        background-color: rgb(24, 24, 26);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    header {
+        justify-content: flex-start;
+    }
+
+    main {
+        width: 80vw;
+        max-width: 1500px;
+    }
+
+    .input-section,
+    .result-section,
+    .position,
+    .idolResult,
+    .environmentSettings {
+        background-color: rgb(36, 36, 38);
+        margin: 1vw 0;
+        padding: 5px 10px;
+        border-radius: 15px;
+    }
+
+    button {
+        background-color: #4c56af;
+        color: white;
+        margin: 5px 10px 5px 0;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        opacity: 0.7;
+    }
+
+    h1,
+    h2,
+    h3,
+    div,
+    input,
+    select,
+    option {
+        color: white;
+    }
+
+    h2 {
+        margin: 5px 0;
+    }
+
+    h3 {
+        text-align: center;
+    }
+
+    input,
+    select {
+        cursor: pointer;
+        border: 1px rgba(150, 150, 150, 0.5) solid;
+        border-radius: 4px;
+        background-color: rgb(58, 58, 60);
+    }
+
+    input[type="number"] {
+        cursor: text;
+    }
+
+    label {
+        display: flex;
+    }
+
+    label input[type="number"],
+    label select {
+        flex-grow: 1;
+        width: 50px;
+    }
+
+    .abilitiesContainer select {
+        width: 100%;
+    }
+
+    .position-container,
+    .idolResults {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+
+    .position,
+    .idolResult,
+    .environmentSettings {
+        margin: 0.25vw;
+        padding: 10px;
+        border: 2px rgba(112, 112, 112, 0.5) solid;
+        flex-direction: column;
+    }
+
+    .environmentSettings {
+        width: 50%;
+    }
+
+    .position,
+    .idolResult {
+        width: 18%;
+    }
+
+    .position>div {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .sideBySide {
+        display: flex;
+    }
+
+    @media screen and (max-width: 959px) {
+        /* 959px以下に適用されるCSS（タブレット用） */
+
+        .position-container,
+        .idolResults {
+            flex-direction: column;
+        }
+
+        .input-section,
+        .result-section,
+        .position,
+        .idolResult,
+        .environmentSettings {
+            box-sizing: border-box;
+            margin: 7.5px 0;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: unset;
+        }
+
+        button:active {
+            opacity: 0.7;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        /* 480px以下に適用されるCSS（スマホ用） */
+    }
+</style>
+
+<body>
+    <header>
+        <h1>グレフェス計算機 ver. 1.0.0</h1>
+    </header>
+    <main>
+        <section class="input-section">
+            <h2>入力</h2>
+            <div class="position-container">
+                <!-- Leader -->
+                <div class="position" id="Leader">
+                    <h3>Leader</h3>
+                    <div>
+                        <label>思い出レベル:
+                            <select id="leBomLevel">
+                                <option value="0">Lv.1</option>
+                                <option value="0.02" selected>Lv.2</option>
+                                <option value="0.03">Lv.3</option>
+                                <option value="0.05">Lv.4</option>
+                                <option value="0.075">Lv.5</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <div><label>Vo: <input type="number" id="leader-vo" value="1390"></label></div>
+                        <div><label>Da: <input type="number" id="leader-da" value="630"></label></div>
+                        <div><label>Vi: <input type="number" id="leader-vi" value="658"></label></div>
+                        <div><label>Me: <input type="number" id="leader-me" value="1550"></label></div>
+                    </div>
+                    <div class="abilitiesContainer">
+                        <div>アビリティを選択:</div>
+                        <div id="leader-abilities-container"></div>
+                    </div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="leader-unitBonus"></label></div>
+                </div>
+
+                <!-- Vocal -->
+                <div class="position" id="Vocal">
+                    <h3>Vocal担当</h3>
+                    <div>
+                        <label>思い出レベル:
+                            <select id="voBomLevel">
+                                <option value="0">Lv.1</option>
+                                <option value="0.02" selected>Lv.2</option>
+                                <option value="0.03">Lv.3</option>
+                                <option value="0.05">Lv.4</option>
+                                <option value="0.075">Lv.5</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <div><label>Vo: <input type="number" id="vocal-vo" value="3114"></label></div>
+                        <div><label>Da: <input type="number" id="vocal-da" value="880"></label></div>
+                        <div><label>Vi: <input type="number" id="vocal-vi" value="848"></label></div>
+                        <div><label>Me: <input type="number" id="vocal-me" value="140"></label></div>
+                    </div>
+                    <div class="abilitiesContainer">
+                        <div>アビリティを選択:</div>
+                        <div id="vocal-abilities-container"></div>
+                    </div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="vocal-unitBonus"></label></div>
+                </div>
+
+                <!-- Center -->
+                <div class="position" id="Center">
+                    <h3>Center</h3>
+                    <div>
+                        <label>思い出レベル:
+                            <select id="ceBomLevel">
+                                <option value="0">Lv.1</option>
+                                <option value="0.02" selected>Lv.2</option>
+                                <option value="0.03">Lv.3</option>
+                                <option value="0.05">Lv.4</option>
+                                <option value="0.075">Lv.5</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <div><label>Vo: <input type="number" id="center-vo" value="2650"></label></div>
+                        <div><label>Da: <input type="number" id="center-da" value="920"></label></div>
+                        <div><label>Vi: <input type="number" id="center-vi" value="918"></label></div>
+                        <div><label>Me: <input type="number" id="center-me" value="400"></label></div>
+                    </div>
+                    <div class="abilitiesContainer">
+                        <div>アビリティを選択:</div>
+                        <div id="center-abilities-container"></div>
+                    </div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="center-unitBonus"></label></div>
+                </div>
+
+                <!-- Dance -->
+                <div class="position" id="Dance">
+                    <h3>Dance担当</h3>
+                    <div>
+                        <label>思い出レベル:
+                            <select id="daBomLevel">
+                                <option value="0">Lv.1</option>
+                                <option value="0.02" selected>Lv.2</option>
+                                <option value="0.03">Lv.3</option>
+                                <option value="0.05">Lv.4</option>
+                                <option value="0.075">Lv.5</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <div><label>Vo: <input type="number" id="dance-vo" value="2344"></label></div>
+                        <div><label>Da: <input type="number" id="dance-da" value="810"></label></div>
+                        <div><label>Vi: <input type="number" id="dance-vi" value="820"></label></div>
+                        <div><label>Me: <input type="number" id="dance-me" value="160"></label></div>
+                    </div>
+                    <div class="abilitiesContainer">
+                        <div>アビリティを選択:</div>
+                        <div id="dance-abilities-container"></div>
+                    </div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="dance-unitBonus"></label></div>
+                </div>
+
+                <!-- Visual -->
+                <div class="position" id="Visual">
+                    <h3>Visual担当</h3>
+                    <div>
+                        <label>思い出レベル:
+                            <select id="viBomLevel">
+                                <option value="0">Lv.1</option>
+                                <option value="0.02" selected>Lv.2</option>
+                                <option value="0.03">Lv.3</option>
+                                <option value="0.05">Lv.4</option>
+                                <option value="0.075">Lv.5</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <div><label>Vo: <input type="number" id="visual-vo" value="2380"></label></div>
+                        <div><label>Da: <input type="number" id="visual-da" value="768"></label></div>
+                        <div><label>Vi: <input type="number" id="visual-vi" value="778"></label></div>
+                        <div><label>Me: <input type="number" id="visual-me" value="180"></label></div>
+                    </div>
+                    <div class="abilitiesContainer">
+                        <div>アビリティを選択:</div>
+                        <div id="visual-abilities-container"></div>
+                    </div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="visual-unitBonus"></label></div>
+                </div>
+            </div>
+
+            <div class="environmentSettings">
+                <div>
+                    <div><label>ターン数:<input type="number" id="turn" value="1" required>ターン目</label></div>
+                </div>
+                <div>
+                    <div><label>Voバフ:<input type="number" id="voBuff" value="0" required>%</label></div>
+                    <div><label>Daバフ:<input type="number" id="daBuff" value="21" required>%</label></div>
+                    <div><label>Viバフ:<input type="number" id="viBuff" value="61" required>%</label></div>
+                </div>
+
+                <div>
+                    <label>アピール実施者:
+                        <select id="appealExecutor">
+                            <option value="le">Leader</option>
+                            <option value="vo">Vocal</option>
+                            <option value="ce" selected>Center</option>
+                            <option value="da">Dance</option>
+                            <option value="vi">Visual</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="sideBySide">
+                    <label>思い出アピール:<input type="checkbox" id="memoryAppeal"></label>
+                    <label>（チャージアピール:<input type="checkbox" id="chargeAppeal">）</label>
+                </div>
+
+                <div><label>アピール倍率（札／思い出アピールの追加効果）:<input type="number" id="appealMultiplier" value="2"
+                            required>倍</label>
+                </div>
+
+
+                <div>
+                    <label>アピール判定係数:
+                        <select id="appealCoefficient" required>
+                            <option value="0.5">通常アピール Bad (0.5)</option>
+                            <option value="1.0">通常アピール Normal (1.0)</option>
+                            <option value="1.1">通常アピール Good (1.1)</option>
+                            <option value="1.5" selected>通常アピール Perfect (1.5)</option>
+                            <option value="1.5">思い出アピール (1.5)</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div>
+                    <label>一致属性:
+                        <select id="attributeMatch" required>
+                            <option value="vo">Vocal</option>
+                            <option value="da">Dance</option>
+                            <option value="vi" selected>Visual</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <button onclick="calculateStatus()">計算</button>
+            <button onclick="saveFormData()">セーブ</button>
+            <button onclick="loadFormData()">ロード</button>
+        </section>
+
+        <section class="result-section">
+            <h2>結果</h2>
+            <div class="idolResults">
+                <div class="idolResult">
+                    <h3>Leader</h3>
+                    <div id="adjusted-leader-vo">Vo:</div>
+                    <div id="adjusted-leader-da">Da:</div>
+                    <div id="adjusted-leader-vi">Vi:</div>
+                    <div id="adjusted-leader-me">Me:</div>
+                    <div id="leader-result-container"></div>
+                </div>
+                <div class="idolResult">
+                    <h3>Vocal担当</h3>
+                    <div id="adjusted-vocal-vo">Vo:</div>
+                    <div id="adjusted-vocal-da">Da:</div>
+                    <div id="adjusted-vocal-vi">Vi:</div>
+                    <div id="adjusted-vocal-me">Me:</div>
+                    <div id="vocal-result-container"></div>
+                </div>
+                <div class="idolResult">
+                    <h3>Center</h3>
+                    <div id="adjusted-center-vo">Vo:</div>
+                    <div id="adjusted-center-da">Da:</div>
+                    <div id="adjusted-center-vi">Vi:</div>
+                    <div id="adjusted-center-me">Me:</div>
+                    <div id="center-result-container"></div>
+                </div>
+                <div class="idolResult">
+                    <h3>Visual担当</h3>
+                    <div id="adjusted-dance-vo">Vo:</div>
+                    <div id="adjusted-dance-da">Da:</div>
+                    <div id="adjusted-dance-vi">Vi:</div>
+                    <div id="adjusted-dance-me">Me:</div>
+                    <div id="dance-result-container"></div>
+                </div>
+                <div class="idolResult">
+                    <h3>Dance担当</h3>
+                    <div id="adjusted-visual-vo">Vo:</div>
+                    <div id="adjusted-visual-da">Da:</div>
+                    <div id="adjusted-visual-vi">Vi:</div>
+                    <div id="adjusted-visual-me">Me:</div>
+                    <div id="visual-result-container"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div><a href="https://x.com/w_tsxg" target="_blank">@w_tsxg</a></div>
+    </footer>
+</body>
+
+<script>
+    "use strict";
+
+    // スーパー変数宣言ゾーン
+    const positions = ["Leader", "Vocal", "Center", "Dance", "Visual"];
+    const baseStats = ["Vo", "Da", "Vi", "Me"];
+
+    // ページ読み込み時の処理
+    window.onload = function () {
+        // 共通のドロップダウンメニュー作成処理
+        const abilityOptions = [
+            { type: "none", multiplier: "0", value: "なし" },
+            { type: "positionSuitability", multiplier: "0.10", value: "ポジション適正〇" }, // 基礎ポジションボーナスをCenterなら+5%、Vocal/Visual/Dance/Centerなら+10%
+            { type: "positionSuitability", multiplier: "0.15", value: "ポジション適正◎" }, // 基礎ポジションボーナスをCenterなら+10%、Vocal/Visual/Dance/Centerなら+15%
+            { type: "basePositionBonus", multiplier: "0.05", value: "オールラウンダー〇" }, // 基礎ポジションボーナスを+5%
+            { type: "basePositionBonus", multiplier: "0.10", value: "オールラウンダー◎" }, // 基礎ポジションボーナスを+10%
+            { type: "allBaseStatBonus", multiplier: "0.05", value: "スペシャリスト" }, // 全基礎能力へのボーナスを+5%
+            { type: "allBaseStatUp", multiplier: "0.06", value: "基礎能力値UP(+6%)" }, // すべての基礎能力値+6%
+            { type: "roleModel", multiplier: "0.20", value: "ロールモデル" }, // Leaderなら全基礎能力へのボーナスを+20%
+            { type: "allBaseStatBonus", multiplier: "0.01", value: "エキシビションマッチ(ノウハウ)" }, // 全基礎能力へのボーナスを+1%
+            { type: "allBaseStatBonus", multiplier: "0.02", value: "エキシビションマッチ+" }, // 全基礎能力へのボーナスを+2%
+            { type: "allBaseStatBonus", multiplier: "0.03", value: "エキシビションマッチ++" }, // 全基礎能力へのボーナスを+3%
+            { type: "voBaseStatBonus", multiplier: "0.03", value: "歌唱力のはばたき" }, // Vocalボーナスを+3%
+            { type: "daBaseStatBonus", multiplier: "0.03", value: "安定感のきらめき" }, // Danceボーナスを+3%
+            { type: "viBaseStatBonus", multiplier: "0.03", value: "表現力のひろがり" }, // Visualボーナスを+3%
+            { type: "allBaseStatBonus", multiplier: "0.03", value: "大いなる一歩" }, // 全基礎能力へのボーナスを+3%
+            { type: "allBaseStatBonus", multiplier: "0.05", value: "ラブレターのAnswer--" }, // 全基礎能力へのボーナスを+5%
+            { type: "allBaseStatBonus", multiplier: "0.03", value: "エントリーライブ" }, // 全基礎能力へのボーナスを+3%
+            { type: "allBaseStatBonus", multiplier: "0.05", value: "エキシビションマッチ(STEP)" }, // 全基礎能力へのボーナスを+5%
+            { type: "allBaseStatUp", multiplier: "0.03", value: "基礎能力値UP(+3%)" }, // すべての基礎能力値+3%
+        ];
+
+        positions.forEach(position => {
+            for (let i = 0; i < 20; i += 1) { // アビリティ選択ドロップダウンメニューの個数を指定
+                const selectElement = document.createElement("select");
+                selectElement.classList.add(`${position.toLowerCase()}-ability`);
+                selectElement.id = `${position.toLowerCase()}-ability-${i}`;
+
+                abilityOptions.forEach(abilityOption => {
+                    const option = document.createElement("option");
+                    option.setAttribute("data-type", abilityOption.type);
+                    option.setAttribute("data-multiplier", abilityOption.multiplier);
+                    option.textContent = abilityOption.value;
+                    selectElement.appendChild(option);
+                });
+
+                document.getElementById(`${position.toLowerCase()}-abilities-container`).appendChild(selectElement);
+            };
+        });
+    };
+
+    // 計算処理
+    function calculateStatus() {
+        console.log('計算開始');
+        // ポジションボーナスの設定
+        const positionBonuses = {
+            Leader: { Vo: 0, Da: 0, Vi: 0, Me: 1.0 },
+            Vocal: { Vo: 1.0, Da: 0, Vi: 0, Me: 0 },
+            Center: { Vo: 0.5, Da: 0.5, Vi: 0.5, Me: 0 },
+            Dance: { Vo: 0, Da: 1.0, Vi: 0, Me: 0 },
+            Visual: { Vo: 0, Da: 0, Vi: 1.0, Me: 0 }
+        };
+
+        // ポジションごとに計算
+        positions.forEach(position => {
+            console.log(position + '担当の計算を開始');
+
+            // ユニットボーナスの適用
+            let unitBonus = 0;
+            const unitBonusCheckbox = document.getElementById(`${position.toLowerCase()}-unitBonus`);
+            const applyUnitBonus = unitBonusCheckbox.checked;
+            if (applyUnitBonus) {
+                unitBonus = 0.20;
+            };
+
+            // Vo、Da、Vi、Meごとに計算
+            baseStats.forEach(baseStat => {
+                const initialBaseStat = parseInt(document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value);
+
+                // アビリティの計算
+                let baseStatIncrease = 0; // 基礎能力値UP系アビリティによる基礎能力値の増加量
+                let basePositionBonusMultiplier = 0; // アビリティによる基礎ポジションボーナス補正値
+                let allBaseStatBonusMultiplier = 0;  // 全基礎能力へのボーナス
+                let specificBaseStatBonusMultiplier = 0; // 特定の基礎能力へのボーナス
+
+                // アビリティを1個ずつ処理
+                document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
+                    const selectedOption = dropdown.options[dropdown.selectedIndex];
+                    const type = selectedOption.getAttribute('data-type');
+                    const multiplier = parseFloat(selectedOption.getAttribute('data-multiplier'));
+
+                    if (type !== "none") {
+                        switch (type) {
+                            case 'allBaseStatUp': // 基礎能力値UP系
+                                baseStatIncrease += Math.ceil(initialBaseStat * multiplier);
+                                break;
+                            case 'basePositionBonus': // 基礎ポジションボーナス
+                                if (positionBonuses[position][baseStat] > 0) {
+                                    basePositionBonusMultiplier += multiplier;
+                                }
+                                break;
+                            case 'positionSuitability': // ポジション適正〇◎による基礎ポジションボーナス
+                                if (positionBonuses[position][baseStat] > 0) {
+                                    if (position === "Center") { // Center適正〇◎を適用
+                                        basePositionBonusMultiplier += (multiplier - 0.05);
+                                    } else {
+                                        basePositionBonusMultiplier += multiplier;
+                                    };
+                                };
+                                break;
+                            case 'allBaseStatBonus': // 全基礎能力へのボーナス
+                                allBaseStatBonusMultiplier += multiplier;
+                                break;
+                            case `${baseStat.toLowerCase()}BaseStatBonus`: // 特定の基礎能力へのボーナス
+                                specificBaseStatBonusMultiplier += multiplier;
+                                break;
+                            case 'roleModel': // ロールモデルによる全基礎能力へのボーナス
+                                if (position === "Leader") {
+                                    allBaseStatBonusMultiplier += multiplier;
+                                }
+                                break;
+                        }
+                    }
+                });
+
+                // 補正込み最終基礎能力値
+                const adjustedBaseStat = Math.ceil((initialBaseStat + baseStatIncrease) * (1 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus));
+                document.getElementById(`adjusted-${position.toLowerCase()}-${baseStat.toLowerCase()}`).textContent = `${baseStat}: ${adjustedBaseStat}`;
+            });
+
+            console.log(position + 'の計算を終了');
+        });
+
+        console.log('計算終了');
+    };
+
+    // JSONとして保存
+    function saveFormData() {        // 確認メッセージを表示
+        const userConfirmed = confirm("この内容でデータを保存しますか？");
+
+        if (userConfirmed) {
+            // OKが押された場合のみ、データを保存
+            console.log('セーブします');
+
+            // JSON形式でデータを構成
+            let data = {};
+
+            // ポジションごとに処理
+            positions.forEach(position => {
+                data[position] = {
+                    baseStat: {
+                        Vo: parseInt(document.getElementById(`${position.toLowerCase()}-vo`).value),
+                        Da: parseInt(document.getElementById(`${position.toLowerCase()}-da`).value),
+                        Vi: parseInt(document.getElementById(`${position.toLowerCase()}-vi`).value),
+                        Me: parseInt(document.getElementById(`${position.toLowerCase()}-me`).value)
+                    },
+                    abilities: [],
+                    unitBonus: document.getElementById(`${position.toLowerCase()}-unitBonus`).checked
+                };
+
+                // アビリティ
+                document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
+                    const selectedOption = dropdown.options[dropdown.selectedIndex];
+                    const value = selectedOption.value;
+                    data[position]["abilities"].push(value);
+                });
+            });
+
+            // ファイルとして保存
+            const jsonData = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonData], { type: "application/json" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "data.json";
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+    }
+
+    // JSONを読み込む
+    function loadFormData() {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = ".json";
+        fileInput.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = JSON.parse(e.target.result);
+                    positions.forEach(position => {
+                        // 基礎能力値
+                        baseStats.forEach(baseStat => {
+                            document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value = data[position].baseStat[baseStat] || '';
+                        });
+
+                        // アビリティ
+                        for (let i = 0; i < 20; i += 1) {
+                            const selectBox = document.getElementById(`${position.toLowerCase()}-ability-${i}`);
+                            selectBox.value = data[position].abilities[i];
+                        };
+
+                        // ユニットボーナス
+                        document.getElementById(`${position.toLowerCase()}-unitBonus`).checked = data[position].unitBonus || false;
+                    });
+                    calculateStatus();
+                };
+                reader.readAsText(file);
+            }
+        };
+        fileInput.click();
+
+    };
+</script>
+
+</html>
