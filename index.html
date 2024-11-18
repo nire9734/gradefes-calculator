@@ -16,10 +16,19 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        font-size: 16px;
     }
 
     header {
-        justify-content: flex-start;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    header h1 {
+        margin-bottom: 0;
     }
 
     main {
@@ -32,14 +41,76 @@
         margin: 10px 0;
     }
 
-    a {
+    p,
+    a,
+    h1,
+    h2,
+    h3,
+    div,
+    input,
+    select,
+    option {
         color: white;
+        margin: 0;
     }
 
-    .input-section,
-    .result-section,
+    a:hover,
+    button:hover {
+        opacity: 0.7;
+    }
+
+    h2 {
+        margin: 5px;
+    }
+
+    h3 {
+        margin: 7.5px 0;
+        text-align: center;
+    }
+
+    input,
+    select {
+        padding: 2px;
+        cursor: pointer;
+        border: 1px rgba(150, 150, 150, 0.5) solid;
+        border-radius: 4px;
+        background-color: rgb(58, 58, 60);
+        margin: 2px 0;
+    }
+
+    input[type="number"] {
+        cursor: text;
+    }
+
+    input {
+        margin: 0 5px;
+    }
+
+    .baseStatsContainer input {
+        margin-right: 0;
+    }
+
+    label {
+        display: flex;
+    }
+
+    label input[type="number"],
+    input[type="range"],
+    label select {
+        flex-grow: 1;
+        width: 50px;
+    }
+
+    .abilitiesContainer select {
+        width: 100%;
+    }
+
+    .inputSection,
+    .resultSection,
     .position,
-    .idolResult {
+    .idolResult,
+    .unitResult,
+    .environmentSettings {
         background-color: rgb(36, 36, 38);
         margin: 1vw 0;
         padding: 5px 10px;
@@ -57,56 +128,8 @@
         font-size: 16px;
     }
 
-    a:hover,
-    button:hover {
-        opacity: 0.7;
-    }
-
-    h1,
-    h2,
-    h3,
-    div,
-    input,
-    select,
-    option {
-        color: white;
-    }
-
-    h2 {
-        margin: 5px 0;
-    }
-
-    h3 {
-        text-align: center;
-    }
-
-    input,
-    select {
-        cursor: pointer;
-        border: 1px rgba(150, 150, 150, 0.5) solid;
-        border-radius: 4px;
-        background-color: rgb(58, 58, 60);
-    }
-
-    input[type="number"] {
-        cursor: text;
-    }
-
-    label {
-        display: flex;
-    }
-
-    label input[type="number"],
-    label select {
-        flex-grow: 1;
-        width: 50px;
-    }
-
-    .abilitiesContainer select {
-        width: 100%;
-    }
-
-    .position-container,
+    .positionContainer,
+    .appealContainer,
     .idolResults {
         display: flex;
         justify-content: space-between;
@@ -114,11 +137,17 @@
     }
 
     .position,
-    .idolResult {
+    .idolResult,
+    .unitResult,
+    .environmentSettings {
         margin: 0.25vw;
         padding: 10px;
         border: 2px rgba(112, 112, 112, 0.5) solid;
         flex-direction: column;
+    }
+
+    .environmentSettings {
+        width: 50%;
     }
 
     .position,
@@ -128,25 +157,42 @@
 
     .position>div {
         width: 100%;
-        margin: 10px 0;
+        margin-top: 20px;
     }
 
+    .bomLevelContainer,
+    .sliderContainer,
     .sideBySide {
         display: flex;
     }
 
+    .bomLevelContainer {
+        flex-wrap: wrap;
+    }
+
+    .sliderContainer {
+        flex-grow: 1;
+        align-items: center;
+    }
+
+
     @media screen and (max-width: 959px) {
         /* 959px以下に適用されるCSS（タブレット用） */
 
-        .position-container,
+        main {
+            max-width: 550px;
+        }
+
+        .positionContainer,
         .idolResults {
             flex-direction: column;
         }
 
-        .input-section,
-        .result-section,
+        .inputSection,
+        .resultSection,
         .position,
-        .idolResult {
+        .idolResult,
+        .environmentSettings {
             box-sizing: border-box;
             margin: 7.5px 0;
             width: 100%;
@@ -170,16 +216,30 @@
 
 <body>
     <header>
-        <h1>グレフェス計算機 ver. 1.0.1</h1>
+        <div>
+            <h1>グレフェス計算機</h1>
+        </div>
+        <div>
+            ver. 1.0.2
+        </div>
     </header>
     <main>
-        <section class="input-section">
+        <section class="inputSection">
             <h2>入力</h2>
-            <div class="position-container">
+            <div class="positionContainer">
                 <!-- Leader -->
                 <div class="position" id="Leader">
                     <h3>Leader</h3>
-                    <div>
+                    <div class="bomLevelContainer">
+                        <label for="leaderBomLevel">思い出レベル:</label>
+                        <div class="sliderContainer">
+                            <input id="leaderBomLevel" data-target="leaderBomLevelValue" type="range" min="1" max="5"
+                                step="1" value="3">
+                            <div>Lv.</div>
+                            <div id="leaderBomLevelValue" class="sliderValue">3</div>
+                        </div>
+                    </div>
+                    <div class="baseStatsContainer">
                         <div><label>Vo: <input type="number" id="leader-vo" value="1390"></label></div>
                         <div><label>Da: <input type="number" id="leader-da" value="630"></label></div>
                         <div><label>Vi: <input type="number" id="leader-vi" value="658"></label></div>
@@ -195,7 +255,16 @@
                 <!-- Vocal -->
                 <div class="position" id="Vocal">
                     <h3>Vocal担当</h3>
-                    <div>
+                    <div class="bomLevelContainer">
+                        <label for="vocalBomLevel">思い出レベル:</label>
+                        <div class="sliderContainer">
+                            <input id="vocalBomLevel" data-target="vocalBomLevelValue" type="range" min="1" max="5"
+                                step="1" value="3">
+                            <div>Lv.</div>
+                            <div id="vocalBomLevelValue" class="sliderValue">3</div>
+                        </div>
+                    </div>
+                    <div class="baseStatsContainer">
                         <div><label>Vo: <input type="number" id="vocal-vo" value="3114"></label></div>
                         <div><label>Da: <input type="number" id="vocal-da" value="880"></label></div>
                         <div><label>Vi: <input type="number" id="vocal-vi" value="848"></label></div>
@@ -211,7 +280,16 @@
                 <!-- Center -->
                 <div class="position" id="Center">
                     <h3>Center</h3>
-                    <div>
+                    <div class="bomLevelContainer">
+                        <label for="centerBomLevel">思い出レベル:</label>
+                        <div class="sliderContainer">
+                            <input id="centerBomLevel" data-target="centerBomLevelValue" type="range" min="1" max="5"
+                                step="1" value="3">
+                            <div>Lv.</div>
+                            <div id="centerBomLevelValue" class="sliderValue">3</div>
+                        </div>
+                    </div>
+                    <div class="baseStatsContainer">
                         <div><label>Vo: <input type="number" id="center-vo" value="2650"></label></div>
                         <div><label>Da: <input type="number" id="center-da" value="920"></label></div>
                         <div><label>Vi: <input type="number" id="center-vi" value="918"></label></div>
@@ -227,7 +305,16 @@
                 <!-- Dance -->
                 <div class="position" id="Dance">
                     <h3>Dance担当</h3>
-                    <div>
+                    <div class="bomLevelContainer">
+                        <label for="danceBomLevel">思い出レベル:</label>
+                        <div class="sliderContainer">
+                            <input id="danceBomLevel" data-target="danceBomLevelValue" type="range" min="1" max="5"
+                                step="1" value="3">
+                            <div>Lv.</div>
+                            <div id="danceBomLevelValue" class="sliderValue">3</div>
+                        </div>
+                    </div>
+                    <div class="baseStatsContainer">
                         <div><label>Vo: <input type="number" id="dance-vo" value="2344"></label></div>
                         <div><label>Da: <input type="number" id="dance-da" value="810"></label></div>
                         <div><label>Vi: <input type="number" id="dance-vi" value="820"></label></div>
@@ -243,7 +330,16 @@
                 <!-- Visual -->
                 <div class="position" id="Visual">
                     <h3>Visual担当</h3>
-                    <div>
+                    <div class="bomLevelContainer">
+                        <label for="visualBomLevel">思い出レベル:</label>
+                        <div class="sliderContainer">
+                            <input id="visualBomLevel" data-target="visualBomLevelValue" type="range" min="1" max="5"
+                                step="1" value="3">
+                            <div>Lv.</div>
+                            <div id="visualBomLevelValue" class="sliderValue">3</div>
+                        </div>
+                    </div>
+                    <div class="baseStatsContainer">
                         <div><label>Vo: <input type="number" id="visual-vo" value="2380"></label></div>
                         <div><label>Da: <input type="number" id="visual-da" value="768"></label></div>
                         <div><label>Vi: <input type="number" id="visual-vi" value="778"></label></div>
@@ -258,13 +354,13 @@
             </div>
         </section>
 
-        <section>
+        <section class="actions">
             <button onclick="calculateStatus()">計算</button>
             <button onclick="saveFormData()">セーブ</button>
             <button onclick="loadFormData()">ロード</button>
         </section>
 
-        <section class="result-section">
+        <section class="resultSection">
             <h2>結果</h2>
             <div class="idolResults">
                 <div class="idolResult">
@@ -308,6 +404,13 @@
                     <div id="visual-result-container"></div>
                 </div>
             </div>
+            <div class="unitResult">
+                <h3>ユニット</h3>
+                <div id="unitTotalVo">Vo:</div>
+                <div id="unitTotalDa">Da:</div>
+                <div id="unitTotalVi">Vi:</div>
+                <div id="unitTotalMe">Me:</div>
+            </div>
         </section>
     </main>
     <footer>
@@ -319,17 +422,10 @@
     "use strict";
 
 
-    const appVersion = "1.0.1";
-    const positions = ["Leader", "Vocal", "Center", "Dance", "Visual"];
-    const baseStats = ["Vo", "Da", "Vi", "Me"];
-    let adjustedBaseStats = {
-        Leader: { vo: 0, da: 0, vi: 0, me: 0 },
-        Vocal: { vo: 0, da: 0, vi: 0, me: 0 },
-        Center: { vo: 0, da: 0, vi: 0, me: 0 },
-        Dance: { vo: 0, da: 0, vi: 0, me: 0 },
-        Visual: { vo: 0, da: 0, vi: 0, me: 0 }
-    }
-    const numAbilities = 20; // アビリティ選択ドロップダウンメニューの数
+    const appVersion = "1.0.2",
+        positions = ["Leader", "Vocal", "Center", "Dance", "Visual"],
+        baseStats = ["Vo", "Da", "Vi", "Me"],
+        numAbilities = 20; // アビリティ選択ドロップダウンメニューの数
 
 
     // ページ読み込み時の処理
@@ -376,9 +472,29 @@
     });
 
 
+    // 全てのスライダーを取得
+    const sliders = document.querySelectorAll('input[type="range"]');
+    // 各スライダーにイベントリスナーを設定
+    sliders.forEach(slider => {
+        slider.addEventListener('input', (event) => {
+            // スライダーの data-target 属性で関連付けられたテキスト要素を更新
+            const targetId = slider.dataset.target;
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.innerText = slider.value;
+            }
+        });
+    });
+
+
+
     // 計算処理
     function calculateStatus() {
-        console.log('計算開始');
+
+        let adjustedBaseStats = { Leader: {}, Vocal: {}, Center: {}, Dance: {}, Visual: {} }, // 補正した基礎能力値
+            unitTotalBaseStats = { Vo: 0, Da: 0, Vi: 0, Me: 0 }, // フェスユニットの合計基礎能力値
+            memoryBonus = 1.0; // 思い出編成補正
+
         // ポジションボーナスの設定
         const positionBonuses = {
             Leader: { Vo: 0, Da: 0, Vi: 0, Me: 1.0 },
@@ -390,25 +506,41 @@
 
         // ポジションごとに計算
         positions.forEach(position => {
-            console.log(position + '担当の計算を開始');
+
+            // 思い出レベル
+            const bomLevel = document.getElementById(`${position.toLowerCase()}BomLevel`).value;
+            if (position !== "Center") {
+                switch (bomLevel) {
+                    case '1':
+                        memoryBonus += 0;
+                        break;
+                    case '2':
+                        memoryBonus += 0.02;
+                        break;
+                    case '3':
+                        memoryBonus += 0.03;
+                        break;
+                    case '4':
+                        memoryBonus += 0.05;
+                        break;
+                    case '5':
+                        memoryBonus += 0.075;
+                        break;
+                };
+            };
 
             // ユニットボーナスの適用
-            let unitBonus = 0;
-            const unitBonusCheckbox = document.getElementById(`${position.toLowerCase()}-unitBonus`);
-            const applyUnitBonus = unitBonusCheckbox.checked;
-            if (applyUnitBonus) {
-                unitBonus = 0.20;
-            };
+            const unitBonus = document.getElementById(`${position.toLowerCase()}-unitBonus`).checked ? 0.20 : 0;
 
             // Vo、Da、Vi、Meごとに計算
             baseStats.forEach(baseStat => {
                 const initialBaseStat = parseInt(document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value);
 
                 // アビリティの計算
-                let baseStatIncrease = 0; // 基礎能力値UP系アビリティによる基礎能力値の増加量
-                let basePositionBonusMultiplier = 0; // アビリティによる基礎ポジションボーナス補正値
-                let allBaseStatsBonusMultiplier = 0;  // アビリティによる全基礎能力へのボーナス
-                let specificBaseStatBonusMultiplier = 0; // アビリティによる特定の基礎能力へのボーナス
+                let baseStatIncrease = 0, // 基礎能力値UP系アビリティによる基礎能力値の増加量
+                    basePositionBonusMultiplier = 0, // アビリティによる基礎ポジションボーナス補正値
+                    allBaseStatsBonusMultiplier = 0,  // アビリティによる全基礎能力へのボーナス
+                    specificBaseStatBonusMultiplier = 0; // アビリティによる特定の基礎能力へのボーナス
 
                 // アビリティを1個ずつ処理
                 document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
@@ -452,13 +584,23 @@
 
                 // 補正込み最終基礎能力値
                 const adjustedBaseStat = Math.ceil((initialBaseStat + baseStatIncrease) * (1 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatsBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus));
+                adjustedBaseStats[position][baseStat] = adjustedBaseStat;
                 document.getElementById(`adjusted-${position.toLowerCase()}-${baseStat.toLowerCase()}`).textContent = `${baseStat}: ${adjustedBaseStat}`;
+
+                // ユニット合計
+                unitTotalBaseStats[baseStat] += adjustedBaseStat;
             });
 
-            console.log(position + 'の計算を終了');
         });
 
-        console.log('計算終了');
+        // フェスユニットのステータス
+        baseStats.forEach(baseStat => {
+            if (baseStat !== "Me") {
+                unitTotalBaseStats[baseStat] = Math.ceil(Math.max(adjustedBaseStats.Leader[baseStat], adjustedBaseStats.Vocal[baseStat], adjustedBaseStats.Center[baseStat], adjustedBaseStats.Visual[baseStat], adjustedBaseStats.Dance[baseStat]) * 1.5 + unitTotalBaseStats[baseStat] * 0.5);
+            };
+            document.getElementById(`unitTotal${baseStat}`).textContent = `${baseStat}: ${unitTotalBaseStats[baseStat]}`;
+        });
+        console.log(unitTotalBaseStats)
     };
 
 
@@ -549,5 +691,7 @@
 
     };
 </script>
+
+</html>
 
 </html>
