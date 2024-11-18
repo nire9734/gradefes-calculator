@@ -170,7 +170,7 @@
 
 <body>
     <header>
-        <h1>グレフェス計算機 ver. 1.0.0 Beta</h1>
+        <h1>グレフェス計算機 ver. 1.0.1</h1>
     </header>
     <main>
         <section class="input-section">
@@ -319,7 +319,7 @@
     "use strict";
 
 
-    // スーパー変数宣言ゾーン
+    const appVersion = "1.0.1";
     const positions = ["Leader", "Vocal", "Center", "Dance", "Visual"];
     const baseStats = ["Vo", "Da", "Vi", "Me"];
     let adjustedBaseStats = {
@@ -463,20 +463,20 @@
 
 
     // JSONとして保存
-    function saveFormData() {        // 確認メッセージを表示
+    function saveFormData() {
         const userConfirmed = confirm("この内容でデータをファイルに保存しますか？");
 
         if (userConfirmed) {
-            // OKが押された場合のみ、データを保存
-            console.log('セーブします');
-
             // JSON形式でデータを構成
-            let data = {};
+            let data = { appInfo: {}, appData: { idolData: {} } };
+
+            // アプリ情報
+            data.appInfo = { appName: "グレフェス計算機", version: `${appVersion}` };
 
             // ポジションごとに処理
             positions.forEach(position => {
-                data[position] = {
-                    baseStat: {
+                data.appData.idolData[position] = {
+                    baseStats: {
                         Vo: parseInt(document.getElementById(`${position.toLowerCase()}-vo`).value),
                         Da: parseInt(document.getElementById(`${position.toLowerCase()}-da`).value),
                         Vi: parseInt(document.getElementById(`${position.toLowerCase()}-vi`).value),
@@ -490,7 +490,7 @@
                 document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
                     const selectedOption = dropdown.options[dropdown.selectedIndex];
                     const value = selectedOption.value;
-                    data[position]["abilities"].push(value);
+                    data.appData.idolData[position]["abilities"].push(value);
                 });
             });
 
@@ -520,17 +520,16 @@
                     positions.forEach(position => {
                         // 基礎能力値
                         baseStats.forEach(baseStat => {
-                            document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value = data[position].baseStat[baseStat] || '';
+                            document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value = data.appData.idolData[position].baseStats[baseStat] || '';
                         });
 
                         // アビリティ
-                        for (let i = 0; i < numAbilities; i += 1) {
+                        for (let i = 0; i < numAbilities; i++) {
                             const selectBox = document.getElementById(`${position.toLowerCase()}-ability-${i}`);
-                            const abilityValue = data[position].abilities[i];
+                            const abilityValue = data.appData.idolData[position].abilities[i];
 
                             // 選択肢の中に abilityValueが存在するかを確認
                             const optionExists = Array.from(selectBox.options).some(option => option.value === abilityValue);
-
                             if (optionExists) {
                                 selectBox.value = abilityValue;
                             } else {
@@ -539,7 +538,7 @@
                         };
 
                         // ユニットボーナス
-                        document.getElementById(`${position.toLowerCase()}-unitBonus`).checked = data[position].unitBonus || false;
+                        document.getElementById(`${position.toLowerCase()}-unitBonus`).checked = data.appData.idolData[position].unitBonus || false;
                     });
                     calculateStatus();
                 };
