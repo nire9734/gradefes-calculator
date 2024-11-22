@@ -239,8 +239,8 @@
         <div>
             <h1>グレフェス計算機</h1>
         </div>
-        <div>
-            ver. 1.0.4
+        <div id="versionDisplay">
+            ver. 0.0.0
         </div>
     </header>
     <main>
@@ -522,14 +522,78 @@
 <script>
     "use strict";
 
-
-    const appVersion = "1.0.4",
+    const appVersion = "0.0.0",
         positions = ["Leader", "Vocal", "Center", "Dance", "Visual"],
         baseStats = ["Vo", "Da", "Vi", "Me"],
         numAbilities = 20; // アビリティ選択ドロップダウンメニューの数
 
+
+    // 小数点以下の桁数を取得
+    function getDecimalPlaces(value) {
+        const strVal = String(value);
+        const dotIndex = strVal.indexOf('.');
+        return dotIndex === -1 ? 0 : (strVal.length - dotIndex - 1);
+    }
+
+    // スケールを計算
+    function calculateScale(decimalPlaces) {
+        return Math.pow(10, decimalPlaces);
+    }
+
+    // 数値の正当性を検証
+    function isValidNumber(value) {
+        return typeof value === 'number' && !isNaN(value);
+    }
+
+    // 小数点以下の桁数を揃えて整数化
+    function normalizeValues(value1, value2) {
+        if (!isValidNumber(value1) || !isValidNumber(value2)) {
+            throw new Error('Both arguments must be valid numbers.');
+        }
+
+        const maxDecimalPlaces = Math.max(getDecimalPlaces(value1), getDecimalPlaces(value2));
+        const scale = calculateScale(maxDecimalPlaces);
+
+        return {
+            intValue1: Math.round(value1 * scale),
+            intValue2: Math.round(value2 * scale),
+            scale
+        };
+    }
+
+    // 加算
+    function calcAdd(value1, value2) {
+        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
+        return (intValue1 + intValue2) / scale;
+    }
+
+    // 減算
+    function calcSubtract(value1, value2) {
+        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
+        return (intValue1 - intValue2) / scale;
+    }
+
+    // 乗算
+    function calcMultiply(value1, value2) {
+        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
+        return (intValue1 * intValue2) / (scale * scale);
+    }
+
+    // 除算
+    function calcDivide(value1, value2) {
+        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
+        if (intValue2 === 0) {
+            throw new Error('Division by zero is not allowed.');
+        }
+        return (intValue1 / intValue2);
+    }
+
+
     // ページ読み込み時の処理
     document.addEventListener('DOMContentLoaded', (event) => {
+        // バージョン表示
+        document.getElementById("versionDisplay").textContent = `ver. ${appVersion}`;
+
         // 共通のドロップダウンメニュー作成処理
         const abilityOptions = [
             { type: "none", multiplier: "0", value: "なし" },
@@ -652,7 +716,7 @@
                     if (type !== "none") {
                         switch (type) {
                             case 'allBaseStatsUp': // 基礎能力値UP系
-                                baseStatIncrease += Math.ceil(initialBaseStat * multiplier / 100);
+                                baseStatIncrease += Math.ceil(calcDivide(calcMultiply(initialBaseStat, multiplier), 100));
                                 break;
                             case 'basePositionBonus': // 基礎ポジションボーナス
                                 if (positionBonuses[position][baseStat] > 0) {
@@ -685,12 +749,12 @@
                 });
 
                 // ポジションごとの補正込み基礎能力値
-                const adjustedBaseStat = Math.ceil((initialBaseStat + baseStatIncrease) * (100 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatsBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus) / 100);
+                const adjustedBaseStat = Math.ceil(calcDivide(calcMultiply((initialBaseStat + baseStatIncrease), (100 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatsBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus)), 100));
                 adjustedBaseStats[position][baseStat] = adjustedBaseStat;
                 document.getElementById(`adjusted-${position.toLowerCase()}-${baseStat.toLowerCase()}`).textContent = `${adjustedBaseStat.toLocaleString()}`;
 
                 // ユニット合計
-                unitTotalBaseStats[baseStat] += adjustedBaseStat;
+                unitTotalBaseStats[baseStat] = calcAdd(adjustedBaseStat, unitTotalBaseStats[baseStat]);
             });
 
         });
@@ -698,10 +762,12 @@
         // フェスユニットの補正込み基礎能力値
         baseStats.forEach(baseStat => {
             if (baseStat !== "Me") {
-                unitTotalBaseStats[baseStat] = Math.ceil(Math.max(adjustedBaseStats.Leader[baseStat], adjustedBaseStats.Vocal[baseStat], adjustedBaseStats.Center[baseStat], adjustedBaseStats.Visual[baseStat], adjustedBaseStats.Dance[baseStat]) * 1.5 + unitTotalBaseStats[baseStat] * 0.5);
+                unitTotalBaseStats[baseStat] = Math.ceil(calcAdd(calcMultiply(Math.max(adjustedBaseStats.Leader[baseStat], adjustedBaseStats.Vocal[baseStat], adjustedBaseStats.Center[baseStat], adjustedBaseStats.Visual[baseStat], adjustedBaseStats.Dance[baseStat]), 1.5), calcMultiply(unitTotalBaseStats[baseStat], 0.5)));
             };
             document.getElementById(`unitTotal${baseStat}`).textContent = `${unitTotalBaseStats[baseStat].toLocaleString()}`;
         });
+        console.log(adjustedBaseStats);
+        console.log(unitTotalBaseStats);
     };
 
 
