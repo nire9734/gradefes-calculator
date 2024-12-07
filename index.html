@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="グレフェス計算">
     <title>グレフェス計算機</title>
 </head>
 
@@ -61,6 +62,10 @@
         margin: 0;
     }
 
+    ul {
+        list-style: none;
+    }
+
     a:hover,
     button:hover {
         opacity: 0.7;
@@ -73,6 +78,10 @@
     h3 {
         margin: 7.5px 0;
         text-align: center;
+    }
+
+    h4 {
+        margin: 0;
     }
 
     input,
@@ -101,15 +110,16 @@
         width: 100%;
     }
 
-    .inputSection,
-    .resultSection,
+    section,
     .position,
     .idolResult,
     .unitResult,
-    .environmentSettings {
+    .sceneSetting,
+    .appealSetting,
+    .appealScoreResult {
         background-color: rgb(36, 36, 38);
-        margin: 1vw 0;
-        padding: 5px 10px;
+        margin: 1.5vw 0;
+        padding: 5px 15px;
         border-radius: 12px;
     }
 
@@ -124,7 +134,16 @@
         font-size: 16px;
     }
 
+    .subButton {
+        background-color: rgb(24, 24, 26);
+        color: white;
+        outline: 2px rgba(112, 112, 112, 0.5) solid;
+        outline-offset: -2px;
+    }
+
     .positionContainer,
+    .sceneSetting label,
+    .tabContent label,
     .idolResults {
         display: flex;
         justify-content: space-between;
@@ -134,9 +153,9 @@
     .position,
     .idolResult,
     .unitResult,
-    .environmentSettings {
-        margin: 0.25vw;
-        padding: 10px;
+    .sceneSetting,
+    .appealSetting,
+    .appealScoreResult {
         border: 2px rgba(112, 112, 112, 0.5) solid;
         flex-direction: column;
     }
@@ -147,6 +166,7 @@
 
     .position,
     .idolResult {
+        margin: 0;
         width: 18%;
     }
 
@@ -168,8 +188,19 @@
     .sliderContainer,
     .sideBySide,
     .statResults,
-    .statResult {
+    .statResult,
+    .appealResult {
         display: flex;
+    }
+
+    .sceneSetting>div {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .sceneSetting>div>div {
+        width: 50%;
+        margin: 0 3%;
     }
 
     .bomLevelContainer,
@@ -187,6 +218,16 @@
         justify-content: space-between;
     }
 
+    .buffDisplay {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .buffDisplay>div,
+    .buffDisplay>p {
+        margin-right: 5px;
+    }
+
     .sliderContainer {
         align-items: center;
         flex-grow: 1;
@@ -196,6 +237,116 @@
         width: 50px;
         flex-grow: 1;
     }
+
+    /* タブ */
+
+    .tabs {
+        margin-bottom: 10px;
+    }
+
+    .tabButtons {
+        display: flex;
+    }
+
+    .tabButtons>input {
+        display: none;
+    }
+
+    .tabButtons>label {
+        margin: 0 1px 0 0;
+        padding: 10px;
+        cursor: pointer;
+        background-color: rgb(36, 36, 38);
+        text-align: center;
+        border: solid 1px rgba(112, 112, 112, 0.5);
+        border-radius: 5px 5px 0 0;
+    }
+
+
+    .tabButtons>input:checked+label {
+        background-color: rgb(24, 24, 26);
+        border-bottom: none;
+    }
+
+    .tabContents {
+        margin-top: -1px;
+        padding: 5px 15px;
+        background-color: rgb(24, 24, 26);
+        border: solid 1px rgba(112, 112, 112, 0.5);
+        border-radius: 0 5px 5px 5px;
+    }
+
+    .tabContent {
+        display: none;
+    }
+
+    .tabContent.active {
+        display: block;
+    }
+
+    .tabContent>div {
+        margin: 5px 0;
+    }
+
+    /* アコーディオンメニュー */
+
+    .accordionItem {
+        margin: 10px 0;
+        border: 1px solid rgba(112, 112, 112, 0.5);
+        border-radius: 5px;
+        background-color: rgb(36, 36, 38);
+    }
+
+    .accordionTitle {
+        display: flex;
+        margin: 0;
+        padding: 10px;
+        cursor: pointer;
+        background-color: rgb(36, 36, 38);
+        border-radius: 5px;
+    }
+
+    .accordionTitle p,
+    .accordionTitle h4 {
+        flex-grow: 1;
+    }
+
+    .accordionCheckbox {
+        display: block;
+        margin: 0;
+    }
+
+    .accordionContent {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 10px;
+        background-color: rgb(36, 36, 38);
+        border-radius: 5px;
+    }
+
+    .linkAppealAccordion,
+    .chargeAppealAccordion {
+        background-color: rgb(24, 24, 26);
+    }
+
+    .mainAppel {
+        margin: 10px 0;
+        padding: 15px;
+        border: 1px solid rgba(112, 112, 112, 0.5);
+        border-radius: 5px;
+    }
+
+    .mainAppel>div {
+        margin: 10px 0;
+    }
+
+    /* チェックボックスが選択されたときに対応する .accordionContent の max-height を変更して開閉を表現 */
+    .accordionTitle:has(.accordionCheckbox:checked)+.accordionContent {
+        max-height: 1000px;
+        /* 適切な大きさを設定（内容に応じて調整） */
+        padding: 0 10px;
+    }
+
 
     @media screen and (max-width: 959px) {
         /* 959px以下に適用されるCSS（タブレット用） */
@@ -213,9 +364,22 @@
         .resultSection,
         .position,
         .idolResult,
-        .environmentSettings {
+        .sceneSetting {
             margin: 7.5px 0;
             width: 100%;
+        }
+
+        .sceneSetting>div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sceneSetting>div>div {
+            width: 100%;
+        }
+
+        .sceneSetting input {
+            max-width: 22.5%;
         }
 
         a:hover,
@@ -244,6 +408,11 @@
         </div>
     </header>
     <main>
+        <section class="message">
+            <h2>更新履歴</h2>
+            <p>ここにメッセージ</p>
+        </section>
+
         <section class="inputSection">
             <h2>入力</h2>
             <div class="positionContainer">
@@ -254,22 +423,22 @@
                         <label for="leaderMemoryLevel">思い出レベル:</label>
                         <div class="sliderContainer">
                             <input id="leaderMemoryLevel" data-target="leaderMemoryLevelValue" type="range" min="1"
-                                max="5" step="1" value="3">
+                                max="5" step="1" value="1">
                             <div>Lv.</div>
-                            <div id="leaderMemoryLevelValue" class="sliderValue">3</div>
+                            <div id="leaderMemoryLevelValue" class="sliderValue">1</div>
                         </div>
                     </div>
                     <div class="baseStatsContainer">
-                        <div><label>Vo: <input type="number" id="leader-vo" value="50"></label></div>
-                        <div><label>Da: <input type="number" id="leader-da" value="50"></label></div>
-                        <div><label>Vi: <input type="number" id="leader-vi" value="50"></label></div>
-                        <div><label>Me: <input type="number" id="leader-me" value="50"></label></div>
+                        <div><label>Vo.: <input type="number" id="leader-vo" value="50"></label></div>
+                        <div><label>Da.: <input type="number" id="leader-da" value="50"></label></div>
+                        <div><label>Vi.: <input type="number" id="leader-vi" value="50"></label></div>
+                        <div><label>Me.: <input type="number" id="leader-me" value="50"></label></div>
                     </div>
                     <div class="abilitiesContainer">
                         <div>アビリティを選択:</div>
-                        <div id="leader-abilities-container"></div>
+                        <div id="leaderAbilitiesContainer"></div>
                     </div>
-                    <div><label>ユニットボーナス: <input type="checkbox" id="leader-unitBonus"></label></div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="leaderUnitBonus"></label></div>
                 </div>
 
                 <!-- Vocal -->
@@ -279,22 +448,22 @@
                         <label for="vocalMemoryLevel">思い出レベル:</label>
                         <div class="sliderContainer">
                             <input id="vocalMemoryLevel" data-target="vocalMemoryLevelValue" type="range" min="1"
-                                max="5" step="1" value="3">
+                                max="5" step="1" value="1">
                             <div>Lv.</div>
-                            <div id="vocalMemoryLevelValue" class="sliderValue">3</div>
+                            <div id="vocalMemoryLevelValue" class="sliderValue">1</div>
                         </div>
                     </div>
                     <div class="baseStatsContainer">
-                        <div><label>Vo: <input type="number" id="vocal-vo" value="50"></label></div>
-                        <div><label>Da: <input type="number" id="vocal-da" value="50"></label></div>
-                        <div><label>Vi: <input type="number" id="vocal-vi" value="50"></label></div>
-                        <div><label>Me: <input type="number" id="vocal-me" value="50"></label></div>
+                        <div><label>Vo.: <input type="number" id="vocal-vo" value="50"></label></div>
+                        <div><label>Da.: <input type="number" id="vocal-da" value="50"></label></div>
+                        <div><label>Vi.: <input type="number" id="vocal-vi" value="50"></label></div>
+                        <div><label>Me.: <input type="number" id="vocal-me" value="50"></label></div>
                     </div>
                     <div class="abilitiesContainer">
                         <div>アビリティを選択:</div>
-                        <div id="vocal-abilities-container"></div>
+                        <div id="vocalAbilitiesContainer"></div>
                     </div>
-                    <div><label>ユニットボーナス: <input type="checkbox" id="vocal-unitBonus"></label></div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="vocalUnitBonus"></label></div>
                 </div>
 
                 <!-- Center -->
@@ -304,22 +473,22 @@
                         <label for="centerMemoryLevel">思い出レベル:</label>
                         <div class="sliderContainer">
                             <input id="centerMemoryLevel" data-target="centerMemoryLevelValue" type="range" min="1"
-                                max="5" step="1" value="3">
+                                max="5" step="1" value="1">
                             <div>Lv.</div>
-                            <div id="centerMemoryLevelValue" class="sliderValue">3</div>
+                            <div id="centerMemoryLevelValue" class="sliderValue">1</div>
                         </div>
                     </div>
                     <div class="baseStatsContainer">
-                        <div><label>Vo: <input type="number" id="center-vo" value="50"></label></div>
-                        <div><label>Da: <input type="number" id="center-da" value="50"></label></div>
-                        <div><label>Vi: <input type="number" id="center-vi" value="50"></label></div>
-                        <div><label>Me: <input type="number" id="center-me" value="50"></label></div>
+                        <div><label>Vo.: <input type="number" id="center-vo" value="50"></label></div>
+                        <div><label>Da.: <input type="number" id="center-da" value="50"></label></div>
+                        <div><label>Vi.: <input type="number" id="center-vi" value="50"></label></div>
+                        <div><label>Me.: <input type="number" id="center-me" value="50"></label></div>
                     </div>
                     <div class="abilitiesContainer">
                         <div>アビリティを選択:</div>
-                        <div id="center-abilities-container"></div>
+                        <div id="centerAbilitiesContainer"></div>
                     </div>
-                    <div><label>ユニットボーナス: <input type="checkbox" id="center-unitBonus"></label></div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="centerUnitBonus"></label></div>
                 </div>
 
                 <!-- Dance -->
@@ -329,22 +498,22 @@
                         <label for="danceMemoryLevel">思い出レベル:</label>
                         <div class="sliderContainer">
                             <input id="danceMemoryLevel" data-target="danceMemoryLevelValue" type="range" min="1"
-                                max="5" step="1" value="3">
+                                max="5" step="1" value="1">
                             <div>Lv.</div>
-                            <div id="danceMemoryLevelValue" class="sliderValue">3</div>
+                            <div id="danceMemoryLevelValue" class="sliderValue">1</div>
                         </div>
                     </div>
                     <div class="baseStatsContainer">
-                        <div><label>Vo: <input type="number" id="dance-vo" value="50"></label></div>
-                        <div><label>Da: <input type="number" id="dance-da" value="50"></label></div>
-                        <div><label>Vi: <input type="number" id="dance-vi" value="50"></label></div>
-                        <div><label>Me: <input type="number" id="dance-me" value="50"></label></div>
+                        <div><label>Vo.: <input type="number" id="dance-vo" value="50"></label></div>
+                        <div><label>Da.: <input type="number" id="dance-da" value="50"></label></div>
+                        <div><label>Vi.: <input type="number" id="dance-vi" value="50"></label></div>
+                        <div><label>Me.: <input type="number" id="dance-me" value="50"></label></div>
                     </div>
                     <div class="abilitiesContainer">
                         <div>アビリティを選択:</div>
-                        <div id="dance-abilities-container"></div>
+                        <div id="danceAbilitiesContainer"></div>
                     </div>
-                    <div><label>ユニットボーナス: <input type="checkbox" id="dance-unitBonus"></label></div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="danceUnitBonus"></label></div>
                 </div>
 
                 <!-- Visual -->
@@ -354,52 +523,232 @@
                         <label for="visualMemoryLevel">思い出レベル:</label>
                         <div class="sliderContainer">
                             <input id="visualMemoryLevel" data-target="visualMemoryLevelValue" type="range" min="1"
-                                max="5" step="1" value="3">
+                                max="5" step="1" value="1">
                             <div>Lv.</div>
-                            <div id="visualMemoryLevelValue" class="sliderValue">3</div>
+                            <div id="visualMemoryLevelValue" class="sliderValue">1</div>
                         </div>
                     </div>
                     <div class="baseStatsContainer">
-                        <div><label>Vo: <input type="number" id="visual-vo" value="50"></label></div>
-                        <div><label>Da: <input type="number" id="visual-da" value="50"></label></div>
-                        <div><label>Vi: <input type="number" id="visual-vi" value="50"></label></div>
-                        <div><label>Me: <input type="number" id="visual-me" value="50"></label></div>
+                        <div><label>Vo.: <input type="number" id="visual-vo" value="50"></label></div>
+                        <div><label>Da.: <input type="number" id="visual-da" value="50"></label></div>
+                        <div><label>Vi.: <input type="number" id="visual-vi" value="50"></label></div>
+                        <div><label>Me.: <input type="number" id="visual-me" value="50"></label></div>
                     </div>
                     <div class="abilitiesContainer">
                         <div>アビリティを選択:</div>
-                        <div id="visual-abilities-container"></div>
+                        <div id="visualAbilitiesContainer"></div>
                     </div>
-                    <div><label>ユニットボーナス: <input type="checkbox" id="visual-unitBonus"></label></div>
+                    <div><label>ユニットボーナス: <input type="checkbox" id="visualUnitBonus"></label></div>
+                </div>
+            </div>
+
+            <div class="appealContainer">
+                <div class="sceneSetting">
+                    <h3>シーン設定</h3>
+                    <div>
+                        <div>
+                            <div><label>ターン数:<input type="number" id="turnCount" value="1" min="1" required></label>
+                            </div>
+                            <div><label>思い出ゲージ(%):<input type="number" id="currentMemoryGauge" value="0.0" step="0.1"
+                                        min="0" placeholder="小数第一位まで" required></label>
+                            </div>
+                            <div><label>ターン開始時メンタル:<input type="number" id="currentMental" value="0" min="0"
+                                        required></label>
+                            </div>
+                            <div><label>ターン開始時注目度(%):<input type="number" id="currentAttention" value="0"
+                                        required></label>
+                            </div>
+                            <div><label>ターン開始時回避率(%):<input type="number" id="currentEvasionRate" value="0"
+                                        required></label>
+                            </div>
+                            <div><label>被弾回数(回):<input type="number" id="hitCount" value="0" min="0" required></label>
+                            </div>
+                            <div><label>回復回数(回):<input type="number" id="healCount" value="0" min="0" required></label>
+                            </div>
+                        </div>
+                        <div>
+                            <div><label>Vo.パッシブバフ(%):<input type="number" id="voPassiveBuff" value="0" required></label>
+                            </div>
+                            <div><label>Da.パッシブバフ(%):<input type="number" id="daPassiveBuff" value="0" required></label>
+                            </div>
+                            <div><label>Vi.パッシブバフ(%):<input type="number" id="viPassiveBuff" value="0" required></label>
+                            </div>
+                            <div><label>Vo.付与バフ(%):<input type="number" id="voActiveBuff" value="0" required></label>
+                            </div>
+                            <div><label>Da.付与バフ(%):<input type="number" id="daActiveBuff" value="0" required></label>
+                            </div>
+                            <div><label>Vi.付与バフ(%):<input type="number" id="viActiveBuff" value="0" required></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="appealSetting">
+                    <h3>アピール設定</h3>
+
+                    <body>
+
+                        <div class="tabs">
+                            <!-- チェックボックスとラベル -->
+                            <div class="tabButtons">
+                                <input type="radio" id="tab1" name="appealTab" value="liveSkillTab" class="tabInput"
+                                    data-tab="liveSkillTab" checked></input>
+                                <label for="tab1">
+                                    <h4>ライブスキル</h4>
+                                </label>
+                                <input type="radio" id="tab2" name="appealTab" value="memoryAppealTab" class="tabInput"
+                                    data-tab="memoryAppealTab"></input>
+                                <label for="tab2">
+                                    <h4>思い出アピール</h4>
+                                </label>
+                            </div>
+
+                            <!-- コンテンツ -->
+                            <div class="tabContents">
+                                <!--通常アピール-->
+                                <div id="liveSkillTab" class="tabContent active">
+
+                                    <div class="mainAppel">
+                                        <h4>アピール本体</h4>
+
+                                        <div>
+                                            <label>アピールポジション:
+                                                <select id="appealExecutor">
+                                                    <option value="Leader">Leader</option>
+                                                    <option value="Vocal">Vocal担当</option>
+                                                    <option value="Center" selected>Center</option>
+                                                    <option value="Dance">Dance担当</option>
+                                                    <option value="Visual">Visual担当</option>
+                                                </select>
+                                            </label>
+
+                                            <label>アピール対象:
+                                                <select id="appealTarget" required>
+                                                    <option value="Vo" selected>Vo.審査員</option>
+                                                    <option value="Da">Da.審査員</option>
+                                                    <option value="Vi">Vi.審査員</option>
+                                                </select>
+                                            </label>
+
+                                            <label>アピール判定:
+                                                <select id="liveSkillCoefficient" required>
+                                                    <option value="0.5">Bad</option>
+                                                    <option value="1.0">Normal</option>
+                                                    <option value="1.1">Good</option>
+                                                    <option value="1.5" selected>Perfect</option>
+                                                </select>
+                                            </label>
+
+                                        </div>
+
+                                        <!--追加効果-->
+                                        <div class="aditionalEffectAccordion" id="liveSkill"></div>
+
+                                    </div>
+
+                                    <!--Link/Plusアピール-->
+                                    <div class="accordion">
+                                        <div class="accordionItem">
+                                            <label class="accordionTitle linkAppealAccordion">
+                                                <h4>Link/Plusアピール</h4>
+                                                <input type="checkbox" id="linkAppealcheckbox"
+                                                    class="accordionCheckbox">
+                                            </label>
+                                            <div class="accordionContent linkAppealAccordion">
+                                                <!--追加効果-->
+                                                <div class="aditionalEffectAccordion" id="linkAppeal">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!--思い出アピール-->
+                                <div id="memoryAppealTab" class="tabContent">
+
+                                    <div class="mainAppel">
+                                        <h4>思い出アピール本体</h4>
+
+                                        <div>
+                                            <label>アピール判定:
+                                                <select id="memoryAppealCoefficient" required>
+                                                    <option value="0.5">Bad</option>
+                                                    <option value="1.5" selected>Good</option>
+                                                </select>
+                                            </label>
+                                        </div>
+
+                                        <!--追加効果-->
+                                        <div class="aditionalEffectAccordion" id="memoryAppeal"></div>
+                                    </div>
+
+                                    <!--Link/Plusアピール-->
+                                    <div class="accordion">
+                                        <div class="accordionItem">
+                                            <label class="accordionTitle linkAppealAccordion">
+                                                <h4>Link/Plusアピール</h4>
+                                                <input type="checkbox" id="memorylLinkAppealcheckbox"
+                                                    class="accordionCheckbox">
+                                            </label>
+                                            <div class="accordionContent linkAppealAccordion">
+                                                <!--追加効果-->
+                                                <div class="aditionalEffectAccordion" id="memoryLinkAppeal">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--チャージアピール-->
+                                    <div class="accordion" id="chargeAppealAccordion">
+                                        <div class="accordionItem">
+                                            <label class="accordionTitle chargeAppealAccordion">
+                                                <h4>チャージアピール</h4>
+                                                <input type="checkbox" id="chargeAppealcheckbox"
+                                                    class="accordionCheckbox">
+                                            </label>
+                                            <div class="accordionContent chargeAppealAccordion">
+                                                <!--追加効果-->
+                                                <div class="aditionalEffectAccordion" id="chargeAppeal">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
                 </div>
             </div>
         </section>
 
         <section class="actions">
             <button onclick="calculateStatus()">計算</button>
-            <button onclick="saveFormData()">セーブ</button>
-            <button onclick="loadFormData()">ロード</button>
+            <button class="subButton" onclick="saveFormData()">保存</button>
+            <button class="subButton" onclick="loadFormData()">読み込み</button>
         </section>
 
-        <section class="resultSection">
+        <section class="resultSection" id="resultSection">
             <h2>結果</h2>
             <div class="idolResults">
                 <div class="idolResult">
                     <h3>Leader</h3>
                     <div class="statResults">
                         <div class="statResult">
-                            <div>Vo:</div>
+                            <div>Vo.:</div>
                             <div id="adjusted-leader-vo"></div>
                         </div>
                         <div class="statResult">
-                            <div>Da:</div>
+                            <div>Da.:</div>
                             <div id="adjusted-leader-da"></div>
                         </div>
                         <div class="statResult">
-                            <div>Vi:</div>
+                            <div>Vi.:</div>
                             <div id="adjusted-leader-vi"></div>
                         </div>
                         <div class="statResult">
-                            <div>Me:</div>
+                            <div>Me.:</div>
                             <div id="adjusted-leader-me"></div>
                         </div>
                     </div>
@@ -408,19 +757,19 @@
                     <h3>Vocal担当</h3>
                     <div class="statResults">
                         <div class="statResult">
-                            <div>Vo:</div>
+                            <div>Vo.:</div>
                             <div id="adjusted-vocal-vo"></div>
                         </div>
                         <div class="statResult">
-                            <div>Da:</div>
+                            <div>Da.:</div>
                             <div id="adjusted-vocal-da"></div>
                         </div>
                         <div class="statResult">
-                            <div>Vi:</div>
+                            <div>Vi.:</div>
                             <div id="adjusted-vocal-vi"></div>
                         </div>
                         <div class="statResult">
-                            <div>Me:</div>
+                            <div>Me.:</div>
                             <div id="adjusted-vocal-me"></div>
                         </div>
                     </div>
@@ -429,19 +778,19 @@
                     <h3>Center</h3>
                     <div class="statResults">
                         <div class="statResult">
-                            <div>Vo:</div>
+                            <div>Vo.:</div>
                             <div id="adjusted-center-vo"></div>
                         </div>
                         <div class="statResult">
-                            <div>Da:</div>
+                            <div>Da.:</div>
                             <div id="adjusted-center-da"></div>
                         </div>
                         <div class="statResult">
-                            <div>Vi:</div>
+                            <div>Vi.:</div>
                             <div id="adjusted-center-vi"></div>
                         </div>
                         <div class="statResult">
-                            <div>Me:</div>
+                            <div>Me.:</div>
                             <div id="adjusted-center-me"></div>
                         </div>
                     </div>
@@ -450,19 +799,19 @@
                     <h3>Dance担当</h3>
                     <div class="statResults">
                         <div class="statResult">
-                            <div>Vo:</div>
+                            <div>Vo.:</div>
                             <div id="adjusted-dance-vo"></div>
                         </div>
                         <div class="statResult">
-                            <div>Da:</div>
+                            <div>Da.:</div>
                             <div id="adjusted-dance-da"></div>
                         </div>
                         <div class="statResult">
-                            <div>Vi:</div>
+                            <div>Vi.:</div>
                             <div id="adjusted-dance-vi"></div>
                         </div>
                         <div class="statResult">
-                            <div>Me:</div>
+                            <div>Me.:</div>
                             <div id="adjusted-dance-me"></div>
                         </div>
                     </div>
@@ -471,46 +820,93 @@
                     <h3>Visual担当</h3>
                     <div class="statResults">
                         <div class="statResult">
-                            <div>Vo:</div>
+                            <div>Vo.:</div>
                             <div id="adjusted-visual-vo"></div>
                         </div>
                         <div class="statResult">
-                            <div>Da:</div>
+                            <div>Da.:</div>
                             <div id="adjusted-visual-da"></div>
                         </div>
                         <div class="statResult">
-                            <div>Vi:</div>
+                            <div>Vi.:</div>
                             <div id="adjusted-visual-vi"></div>
                         </div>
                         <div class="statResult">
-                            <div>Me:</div>
+                            <div>Me.:</div>
                             <div id="adjusted-visual-me"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
             <div class="unitResult">
                 <h3>フェスユニット</h3>
                 <div class="statResults">
                     <div class="statResult">
-                        <div>Vo:</div>
+                        <div>Vo.:</div>
                         <div id="unitTotalVo"></div>
                     </div>
                     <div class="statResult">
-                        <div>Da:</div>
+                        <div>Da.:</div>
                         <div id="unitTotalDa"></div>
                     </div>
                     <div class="statResult">
-                        <div>Vi:</div>
+                        <div>Vi.:</div>
                         <div id="unitTotalVi"></div>
                     </div>
                     <div class="statResult">
-                        <div>Me:</div>
+                        <div>Me.:</div>
                         <div id="unitTotalMe"></div>
                     </div>
                 </div>
             </div>
+            <div class="appealScoreResult">
+                <h3>アピールスコア</h3>
+                <div class="appealResults">
+                    <div>
+                        <div class="buffDisplay">
+                            <p>Vo.:</p>
+                            <div id="appealExecutorStatusVo">0</div>
+                            <p>+</p>
+                            <div id="displayBuffVo">0%</div>
+                        </div>
+                        <div class="buffDisplay">
+                            <p>Da.:</p>
+                            <div id="appealExecutorStatusDa">0</div>
+                            <p>+</p>
+                            <div id="displayBuffDa">0%</div>
+                        </div>
+                        <div class="buffDisplay">
+                            <p>Vi.:</p>
+                            <div id="appealExecutorStatusVi">0</div>
+                            <p>+</p>
+                            <div id="displayBuffVi">0%</div>
+                        </div>
+                    </div>
+                    <div class="appealResult">
+                        <div>Vo.審査員へのアピール値:</div>
+                        <div id="liveSkillVoScore" class="appealScore"></div>
+                        <div id="linkAppealVoScore" class="appealScore"></div>
+                        <div id="memoryAppealVoScore" class="appealScore"></div>
+                        <div id="memoryLinkAppealVoScore" class="appealScore"></div>
+                        <div id="chargeAppealVoScore" class="appealScore"></div>
+                    </div>
+                    <div class="appealResult">
+                        <div>Da.審査員へのアピール値:</div>
+                        <div id="liveSkillDaScore" class="appealScore"></div>
+                        <div id="linkAppealDaScore" class="appealScore"></div>
+                        <div id="memoryAppealDaScore" class="appealScore"></div>
+                        <div id="memoryLinkAppealDaScore" class="appealScore"></div>
+                        <div id="chargeAppealDaScore" class="appealScore"></div>
+                    </div>
+                    <div class="appealResult">
+                        <div>Vi.審査員へのアピール値:</div>
+                        <div id="liveSkillViScore" class="appealScore"></div>
+                        <div id="linkAppealViScore" class="appealScore"></div>
+                        <div id="memoryAppealViScore" class="appealScore"></div>
+                        <div id="memoryLinkAppealViScore" class="appealScore"></div>
+                        <div id="chargeAppealViScore" class="appealScore"></div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -519,109 +915,102 @@
     </footer>
 </body>
 
+<script src="bignumber.js"></script>
 <script>
     "use strict";
 
-    const appVersion = "1.0.5",
+    const appVersion = 0.0.0,
         positions = ["Leader", "Vocal", "Center", "Dance", "Visual"],
         baseStats = ["Vo", "Da", "Vi", "Me"],
-        numAbilities = 20; // アビリティ選択ドロップダウンメニューの数
+        numAbilities = 40, // アビリティ選択ドロップダウンメニューの数
+        numAdditionalEffectsAccordions = 3; // 追加効果アコーディオンメニューの数
 
+    // ページ内リンク
+    function linkscroll(target) {
+        // ターゲット要素を取得
+        const element = document.getElementById(target);
 
-    // 小数点以下の桁数を取得
-    function getDecimalPlaces(value) {
-        const strVal = String(value);
-        const dotIndex = strVal.indexOf('.');
-        return dotIndex === -1 ? 0 : (strVal.length - dotIndex - 1);
+        // ターゲット要素にスクロール
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
     }
 
-    // スケールを計算
-    function calculateScale(decimalPlaces) {
-        return Math.pow(10, decimalPlaces);
-    }
-
-    // 数値の正当性を検証
-    function isValidNumber(value) {
-        return typeof value === 'number' && !isNaN(value);
-    }
-
-    // 小数点以下の桁数を揃えて整数化
-    function normalizeValues(value1, value2) {
-        if (!isValidNumber(value1) || !isValidNumber(value2)) {
-            throw new Error('Both arguments must be valid numbers.');
-        }
-
-        const maxDecimalPlaces = Math.max(getDecimalPlaces(value1), getDecimalPlaces(value2));
-        const scale = calculateScale(maxDecimalPlaces);
-
-        return {
-            intValue1: Math.round(value1 * scale),
-            intValue2: Math.round(value2 * scale),
-            scale
+    // キーが押された際に発火
+    document.addEventListener("keydown", function (event) {
+        const target = event.target;
+        // 入力フィールドではない場合のみ処理を実行
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+            return; // 入力中の場合は処理をスキップ
         };
-    }
 
-    // 加算
-    function calcAdd(value1, value2) {
-        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
-        return (intValue1 + intValue2) / scale;
-    }
-
-    // 減算
-    function calcSubtract(value1, value2) {
-        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
-        return (intValue1 - intValue2) / scale;
-    }
-
-    // 乗算
-    function calcMultiply(value1, value2) {
-        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
-        return (intValue1 * intValue2) / (scale * scale);
-    }
-
-    // 除算
-    function calcDivide(value1, value2) {
-        const { intValue1, intValue2, scale } = normalizeValues(value1, value2);
-        if (intValue2 === 0) {
-            throw new Error('Division by zero is not allowed.');
-        }
-        return (intValue1 / intValue2);
-    }
-
+        if (event.key === "Enter") {
+            calculateStatus();
+            linkscroll("resultSection")
+        };
+    });
 
     // ページ読み込み時の処理
-    document.addEventListener('DOMContentLoaded', (event) => {
+    document.addEventListener("DOMContentLoaded", (event) => {
+
         // バージョン表示
         document.getElementById("versionDisplay").textContent = `ver. ${appVersion}`;
 
-        // 共通のドロップダウンメニュー作成処理
+        // アビリティの共通のドロップダウンメニュー作成処理
         const abilityOptions = [
             { type: "none", multiplier: "0", value: "なし" },
             { type: "positionSuitability", multiplier: "10", value: "ポジション適正〇" }, // 基礎ポジションボーナスをCenterなら+5%、Vocal/Visual/Dance/Centerなら+10%
             { type: "positionSuitability", multiplier: "15", value: "ポジション適正◎" }, // 基礎ポジションボーナスをCenterなら+10%、Vocal/Visual/Dance/Centerなら+15%
             { type: "basePositionBonus", multiplier: "5", value: "オールラウンダー〇" }, // 基礎ポジションボーナスを+5%
             { type: "basePositionBonus", multiplier: "10", value: "オールラウンダー◎" }, // 基礎ポジションボーナスを+10%
+            { type: "slowStarter", multiplier: "20", value: "スロースターター" }, // アピール値最大20%UP[経過ターンが長いほど効果UP]
+            { type: "startDash", multiplier: "10", value: "スタートダッシュ" }, // アピール値最大10%UP[経過ターンが短いほど効果UP]
+            { type: "appealScoreUp", multiplier: "10", value: "パーフェクトリィ" }, // すべてのアピール値を10%UP
+            { type: "memoryHigh", multiplier: "10", value: "アピールUP(思い出高)" }, // アピール値最大10%UP[思い出ゲージが多いほど効果UP]
+            { type: "memoryLow", multiplier: "20", value: "アピールUP(思い出低)" }, // アピール値最大20%UP[思い出ゲージが少ないほど効果UP]
             { type: "allBaseStatsBonus", multiplier: "5", value: "スペシャリスト" }, // 全基礎能力へのボーナスを+5%
-            { type: "allBaseStatsUp", multiplier: "6", value: "基礎能力値UP（+6%）" }, // すべての基礎能力値+6%
+            { type: "allBaseStatsUp", multiplier: "6", value: "基礎能力値UP(+6%)" }, // すべての基礎能力値+6%
+            { type: "memoryHighAndLow", multiplier: "0", value: "アピールUP(思い出高&低)" }, // アピール値最大5%UP[思い出ゲージが多いほど効果UP]/アピール値最大10%UP[思い出ゲージが少ないほど効果UP]
+            { type: "romanticist", multiplier: "10", value: "ロマンチスト" }, // 思い出増加量+5%/アピール値最大10%UP[思い出ゲージが多いほど効果UP]
+            { type: "mentalist", multiplier: "0", value: "メンタリスト" }, // アピール値最大5%UP[メンタルが多いほど効果UP]/アピール値最大10%UP[メンタルが少ないほど効果UP]
             { type: "roleModel", multiplier: "20", value: "ロールモデル" }, // Leaderに設定した際の全基礎能力へのボーナスを+20%
+            { type: "vocalBasePositionBonus", multiplier: "10", value: "スペシャリスト(ボーカル)" }, // Vocalに設定した際の基礎ポジションボーナスを+10%
+            { type: "memoryGaugeUp", multiplier: "3", value: "思い出+(ノウハウ)" }, // 思い出ゲージの増加量を+3%
+            { type: "memoryGaugeUp", multiplier: "5", value: "思い出++(ノウハウ)" }, // 思い出ゲージの増加量を+5%
             { type: "allBaseStatsBonus", multiplier: "1", value: "エキシビションマッチ" }, // 全基礎能力へのボーナスを+1%
             { type: "allBaseStatsBonus", multiplier: "2", value: "エキシビションマッチ+" }, // 全基礎能力へのボーナスを+2%
             { type: "allBaseStatsBonus", multiplier: "3", value: "エキシビションマッチ++" }, // 全基礎能力へのボーナスを+3%
+            { type: "appealScoreUp", multiplier: "2", value: "NEXT STEP" }, // すべてのアピール値を+2%UP
             { type: "voBaseStatBonus", multiplier: "3", value: "歌唱力のはばたき" }, // Vocalボーナスを+3%
             { type: "daBaseStatBonus", multiplier: "3", value: "安定感のきらめき" }, // Danceボーナスを+3%
             { type: "viBaseStatBonus", multiplier: "3", value: "表現力のひろがり" }, // Visualボーナスを+3%
             { type: "allBaseStatsBonus", multiplier: "3", value: "大いなる一歩" }, // 全基礎能力へのボーナスを+3%
+            { type: "appealScoreUp", multiplier: "2", value: "Rhythmic Diva" }, // すべてのアピール値を+2%UP
+            { type: "smileArena", multiplier: "10", value: "スマイルアリーナ" }, // アピール値10%UP[ダメージを受けるまで]
             { type: "allBaseStatsBonus", multiplier: "5", value: "ラブレターのAnswer--" }, // 全基礎能力へのボーナスを+5%
+            { type: "mentalLow", multiplier: "10", value: "Dreaming my way" }, // アピール値最大10%UP[メンタルが少ないほど効果UP]
+            { type: "memoryHigh", multiplier: "5", value: "流星スターランキング" }, // アピール値最大5%UP[思い出ゲージが多いほど効果UP]
+            { type: "slowStarter", multiplier: "10", value: "トップスターは1曲だけ" }, // アピール値最大10%UP[経過ターンが長いほど効果UP]
+            { type: "mentalHigh", multiplier: "5", value: "なんどでも唄おう" }, // アピール値最大5%UP[メンタルが多いほど効果UP]
+            { type: "appealScoreUp", multiplier: "3", value: "なないろ歌合戦" }, // すべてのアピール値を+3%UP
+            { type: "appealScoreUp", multiplier: "3", value: "週刊プリズムメロディーズ" }, // すべてのアピール値を+3%UP
+            { type: "appealScoreUp", multiplier: "3", value: "TOP SONGS" }, // すべてのアピール値を+3%UP
             { type: "allBaseStatsBonus", multiplier: "3", value: "エントリーライブ成功" }, // 全基礎能力へのボーナスを+3%
             { type: "allBaseStatsBonus", multiplier: "5", value: "エキシビションマッチ成功" }, // 全基礎能力へのボーナスを+5%
-            { type: "allBaseStatsUp", multiplier: "3", value: "基礎能力値UP（+3%）" }, // すべての基礎能力値+3%
-            { type: "vocalBasePositionBonus", multiplier: "10", value: "スペシャリスト（ボーカル）" }, // Vocalに設定した際の基礎ポジションボーナスを+10%
+            { type: "appealScoreUp", multiplier: "5", value: "アピールUP(トワコレ)" }, // すべてのアピール値を+5%UP
+            { type: "twilights", multiplier: "0", value: "思い出増加量UP&アピールUP(トワコレ)" }, // 思い出ゲージの増加量を5%UP、すべてのアピール値を+3%UP
+            { type: "memoryGaugeUp", multiplier: "10", value: "思い出増加量UP(トワコレ)" }, // 思い出ゲージの増加量を+10%
+            { type: "slowStarter", multiplier: "20", value: "アピール値最大20%UP(トワコレ)" }, // アピール値最大20%UP[経過ターンが長いほど効果UP]
+            { type: "startDash", multiplier: "10", value: "アピール値最大10%UP(トワコレ)" }, // アピール値最大10%UP[経過ターンが短いほど効果UP]
+            { type: "allBaseStatsUp", multiplier: "3", value: "基礎能力値UP(+3%)" }, // すべての基礎能力値+3%
+            { type: "mentalLow", multiplier: "100", value: "マスフェス用" }, // アピール値最大10%UP[メンタルが少ないほど効果UP]
         ];
         positions.forEach(position => {
             for (let i = 0; i < numAbilities; i += 1) {
                 const selectElement = document.createElement("select");
-                selectElement.classList.add(`${position.toLowerCase()}-ability`);
-                selectElement.id = `${position.toLowerCase()}-ability-${i}`;
+                selectElement.classList.add(`${position.toLowerCase()}Ability`);
+                selectElement.id = `${position.toLowerCase()}Ability${i}`;
 
                 abilityOptions.forEach(abilityOption => {
                     const option = document.createElement("option");
@@ -631,153 +1020,680 @@
                     selectElement.appendChild(option);
                 });
 
-                document.getElementById(`${position.toLowerCase()}-abilities-container`).appendChild(selectElement);
+                document.getElementById(`${position.toLowerCase()}AbilitiesContainer`).appendChild(selectElement);
             };
         });
-    });
 
+        // 追加効果メニューを作成
+        const accordionContainers = document.querySelectorAll(".aditionalEffectAccordion");
+        accordionContainers.forEach(container => {
+            const appealType = container.id
 
-    // 全てのスライダーを取得
-    const sliders = document.querySelectorAll('input[type="range"]');
-    // 各スライダーにイベントリスナーを設定
-    sliders.forEach(slider => {
-        slider.addEventListener('input', (event) => {
-            // スライダーの data-target 属性で関連付けられたテキスト要素を更新
-            const targetId = slider.dataset.target;
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.innerText = slider.value;
+            function createAccordionItem(idSuffix) {
+                // コンテナ作成
+                const accordionItem = document.createElement("div");
+                accordionItem.className = "accordionItem";
+
+                // 追加効果アコーディオンタイトル
+                const label = document.createElement("label");
+                label.className = "accordionTitle";
+
+                const titleText = document.createElement("p");
+                titleText.textContent = `追加効果${idSuffix}`;
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = `${appealType}AccordionCheckbox${idSuffix}`;
+                checkbox.className = "accordionCheckbox";
+
+                label.appendChild(titleText);
+                label.appendChild(checkbox);
+
+                // Accordion content container
+                const accordionContent = document.createElement("div");
+                accordionContent.className = "accordionContent";
+
+                // Tabs container
+                const tabs = document.createElement("div");
+                tabs.className = "tabs";
+
+                // Tab buttons
+                const tabButtons = document.createElement("div");
+                tabButtons.className = "tabButtons";
+
+                const tabButton1 = document.createElement("input");
+                tabButton1.type = "radio";
+                tabButton1.id = `${appealType}AdditionalAppealButton${idSuffix}`;
+                tabButton1.name = `${appealType}AdditionalEffect${idSuffix}`;
+                tabButton1.className = "tabInput";
+                tabButton1.dataset.tab = `${appealType}AdditionalAppealTab${idSuffix}`;
+                tabButton1.checked = true;
+
+                const tabLabel1 = document.createElement("label");
+                tabLabel1.textContent = "アピール";
+                tabLabel1.htmlFor = `${appealType}AdditionalAppealButton${idSuffix}`;
+
+                const tabButton2 = document.createElement("input");
+                tabButton2.id = `${appealType}BuffGrantButton${idSuffix}`;
+                tabButton2.type = "radio";
+                tabButton2.name = `${appealType}AdditionalEffect${idSuffix}`;
+                tabButton2.className = "tabInput";
+                tabButton2.dataset.tab = `${appealType}BuffGrantTab${idSuffix}`;
+
+                const tabLabel2 = document.createElement("label");
+                tabLabel2.textContent = "ステータス効果付与";
+                tabLabel2.htmlFor = `${appealType}BuffGrantButton${idSuffix}`;
+
+                tabButtons.appendChild(tabButton1);
+                tabButtons.appendChild(tabLabel1);
+                tabButtons.appendChild(tabButton2);
+                tabButtons.appendChild(tabLabel2);
+
+                // Tab contents
+                const tabContents = document.createElement("div");
+                tabContents.className = "tabContents";
+
+                // アピールタブ
+                const tabContent1 = document.createElement("div");
+                tabContent1.id = `${appealType}AdditionalAppealTab${idSuffix}`;
+                tabContent1.className = "tabContent active";
+
+                // 全体アピールチェックボックス
+                if (appealType !== "memoryAppeal") {
+                    const appealTargetLabel = document.createElement("label");
+                    appealTargetLabel.textContent = "全観客にアピール: ";
+                    const appealTargetInput = document.createElement("input");
+                    appealTargetInput.type = "checkbox";
+                    appealTargetInput.id = `${appealType}Target${idSuffix}`;
+                    appealTargetLabel.appendChild(appealTargetInput);
+                    tabContent1.appendChild(appealTargetLabel);
+                };
+
+                // アピール倍率スライダー
+                ["Vo", "Da", "Vi"].forEach(type => {
+                    const sliderContainer = document.createElement("div");
+                    sliderContainer.className = "sliderContainer";
+
+                    const sliderLabel = document.createElement("label");
+                    sliderLabel.textContent = `${type}.アピール倍率:`;
+                    sliderLabel.htmlFor = `${appealType}${type}AppealMultiplier${idSuffix}`
+
+                    const sliderInput = document.createElement("input");
+                    sliderInput.type = "range";
+                    sliderInput.id = `${appealType}${type}AppealMultiplier${idSuffix}`;
+                    sliderInput.className = "appealMultiplierSlider";
+                    sliderInput.dataset.target = `${appealType}${type}AppealMultiplierValue${idSuffix}`;
+                    sliderInput.min = "0";
+                    sliderInput.max = "10";
+                    sliderInput.step = "0.1";
+                    sliderInput.value = "0";
+
+                    const sliderValue = document.createElement("div");
+                    sliderValue.id = `${appealType}${type}AppealMultiplierValue${idSuffix}`;
+                    sliderValue.className = "sliderValue";
+                    sliderValue.textContent = "0";
+
+                    sliderContainer.appendChild(sliderLabel);
+                    sliderContainer.appendChild(sliderInput);
+                    sliderContainer.appendChild(sliderValue);
+                    sliderContainer.appendChild(document.createTextNode("倍"));
+
+                    tabContent1.appendChild(sliderContainer);
+                });
+
+                // アコーディオン作成関数
+                function createLabelWithDiv(labelText, divId, parentElement) {
+                    const label = document.createElement("label");
+                    label.textContent = labelText;
+
+                    const div = document.createElement("div");
+                    div.id = divId;
+
+                    label.appendChild(div);
+                    parentElement.appendChild(label);
+                }
+
+                // アピール倍率変動アコーディオン
+                createLabelWithDiv(
+                    "アピール倍率変動: ",
+                    `${appealType}AppealMultiplierChange${idSuffix}`,
+                    tabContent1
+                );
+
+                // アピール強化アコーディオン
+                createLabelWithDiv(
+                    "強化: ",
+                    `${appealType}AppealReinforcement${idSuffix}`,
+                    tabContent1
+                );
+
+                // ステータス効果タブ
+                const tabContent2 = document.createElement("div");
+                tabContent2.id = `${appealType}BuffGrantTab${idSuffix}`;
+                tabContent2.className = "tabContent";
+
+                const statusEffect = ["Vo.バフ増加量(%)", "Da.バフ増加量(%)", "Vi.バフ増加量(%)", "メンタル回復量(%)", "思い出ゲージ増加量(%)", "注目度上昇量(%)", "回避率上昇量(%)"];
+                const statusEffectId = ["Vo", "Da", "Vi", "Me", "MemoryGauge", "Attention", "EvasionRate"];
+                statusEffect.forEach((labelText, index) => {
+                    const container = document.createElement("div");
+                    const label = document.createElement("label");
+                    label.textContent = `${labelText}: `;
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.value = "0";
+                    input.required = true;
+                    input.id = `${appealType}${statusEffectId[index]}Increase${idSuffix}`;
+                    label.appendChild(input);
+                    container.appendChild(label);
+                    tabContent2.appendChild(container);
+
+                    // 減少値が多いほど効果UP
+                    if ([`${statusEffect[0]}`, `${statusEffect[1]}`, `${statusEffect[2]}`].includes(labelText)) {
+                        const label = document.createElement("label");
+                        label.textContent = `[Me減少値が多いほど効果UP]: `;
+                        const input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.id = `${appealType}${["Vo", "Da", "Vi"][index]}MentalLossEnhancesEffect${idSuffix}`
+                        label.appendChild(input);
+                        container.appendChild(label);
+                    };
+
+                    // 超過分は思い出ゲージに変換
+                    if (labelText === `${statusEffect[3]}`) {
+                        const label = document.createElement("label");
+                        label.textContent = `[超過分は思い出ゲージに変換]: `;
+                        const input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.id = `${appealType}ExcessMemoryConversion${idSuffix}`
+                        label.appendChild(input);
+                        container.appendChild(label);
+                    };
+                });
+
+                // タブをコンテナに
+                tabContents.appendChild(tabContent1);
+                tabContents.appendChild(tabContent2);
+                tabs.appendChild(tabButtons);
+                tabs.appendChild(tabContents);
+
+                // 最終アセンブリ
+                accordionContent.appendChild(tabs);
+                accordionItem.appendChild(label);
+                accordionItem.appendChild(accordionContent);
+
+                return accordionItem;
+            }
+
+            for (let i = 1; i <= numAdditionalEffectsAccordions; i++) {
+                // 追加効果アコーディオンメニューの作成
+                const item = createAccordionItem(i);
+                container.appendChild(item);
+
+                // アピール倍率変動の選択肢
+                const appealMultiplierOptions = [
+                    { value: "1.0", text: "なし(固定)" },
+                    { value: "1.0", text: "興味無視" },
+                    { value: "1.0", text: "メンタルが多いほど効果UP" },
+                    { value: "1.0", text: "メンタルが少ないほど効果UP" },
+                    { value: "1.0", text: "思い出ゲージが多いほど効果UP" },
+                    { value: "1.0", text: "注目度が高いほど効果UP" },
+                    { value: "1.0", text: "注目度が低いほど効果UP" }
+                ];
+
+                // アピール強化の選択肢
+                const appealReinforcementOptions = [
+                    { value: "none", text: "なし" },
+                    { value: "Vo", text: "Vocal強化" },
+                    { value: "Da", text: "Dance強化" },
+                    { value: "Vi", text: "Visual強化" }
+                ];
+
+                function createAditionalAppealAccordion(selectId, parentId, options) {
+                    const selectElement = document.createElement("select");
+                    selectElement.id = `${appealType}${selectId}${i}`
+                    options.forEach(option => {
+                        const selectOption = document.createElement("option");
+                        selectOption.value = option.value;
+                        selectOption.textContent = option.text;
+                        selectElement.appendChild(selectOption);
+                    });
+                    document.getElementById(`${appealType}${parentId}${i}`).appendChild(selectElement);
+                }
+
+                createAditionalAppealAccordion("MultiplierSelect", "AppealMultiplierChange", appealMultiplierOptions);
+                createAditionalAppealAccordion("ReinforcementSelect", "AppealReinforcement", appealReinforcementOptions);
             }
         });
+
+        // スライダーの処理
+        const sliders = document.querySelectorAll('input[type="range"]');
+        // 各スライダーにイベントリスナーを設定
+        sliders.forEach(slider => {
+            slider.addEventListener('input', (event) => {
+                // スライダーの data-target 属性で関連付けられたテキスト要素を更新
+                const targetId = slider.dataset.target;
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.innerText = slider.value;
+                }
+            });
+        });
+
+        // アコーディオンメニュー
+        const tabButtons = document.querySelectorAll(".tabInput");
+        tabButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const tabContent = Array.from(button.parentNode.nextElementSibling.children);
+                tabContent.forEach(content => {
+                    content.classList.remove("active")
+                })
+                const tabId = button.getAttribute("data-tab");
+                document.getElementById(tabId).classList.add("active")
+            })
+        });
+
+        // 思い出ゲージの小数表示
+        const memoryGaugeInput = document.getElementById('currentMemoryGauge');
+        memoryGaugeInput.addEventListener('blur', () => {
+            const value = memoryGaugeInput.value;
+            if (value) {
+                memoryGaugeInput.value = parseFloat(value).toFixed(1); // 常に小数点1桁を表示
+            }
+        });
+
     });
 
+    // ページ離脱時の処理
+    window.addEventListener("beforeunload", function (event) {
+        event.preventDefault();
+        event.returnValue = "";
+    });
 
 
     // 計算処理
     function calculateStatus() {
 
-        let adjustedBaseStats = { Leader: {}, Vocal: {}, Center: {}, Dance: {}, Visual: {} }, // 補正込み基礎能力値
-            unitTotalBaseStats = { Vo: 0, Da: 0, Vi: 0, Me: 0 }, // フェスユニットの合計基礎能力値
-            memoryBonus = 1.0; // 思い出編成補正
+        let adjustedBaseStats = { Leader: {}, Vocal: {}, Center: {}, Dance: {}, Visual: {} }, // 基礎能力値UP補正込み能力値 
+            adjustedStats = { Leader: {}, Vocal: {}, Center: {}, Dance: {}, Visual: {} }, // ポジション補正込み能力値
+            unitTotalStats = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0), Me: BigNumber(0) }, // フェスユニットの能力値(編成画面に表示されるやつ)
+            memoryBonus = BigNumber(1.0), // 思い出編成補正
+            turnStartUnitStats = {
+                // ターン開始時のステータス
+                Me: BigNumber(document.getElementById("currentMental").value),
+                Attention: BigNumber(document.getElementById("currentAttention").value),
+                MemoryGauge: BigNumber(document.getElementById("currentMemoryGauge").value),
+                EvasionRate: BigNumber(document.getElementById("currentEvasionRate").value)
+            };
+        console.log(turnStartUnitStats)
 
-        // ポジションボーナスの設定
+        const appealAttributes = ["Vo", "Da", "Vi"];
+        const appealExecutor = document.getElementById("tab2").checked ? "Center" : document.getElementById("appealExecutor").value; // アピール実施ポジション
+        const turnCount = BigNumber(document.getElementById("turnCount").value); // ターン数
         const positionBonuses = {
-            Leader: { Vo: 0, Da: 0, Vi: 0, Me: 100 },
-            Vocal: { Vo: 100, Da: 0, Vi: 0, Me: 0 },
-            Center: { Vo: 50, Da: 50, Vi: 50, Me: 0 },
-            Dance: { Vo: 0, Da: 100, Vi: 0, Me: 0 },
-            Visual: { Vo: 0, Da: 0, Vi: 100, Me: 0 }
+            // ポジションボーナス
+            Leader: { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0), Me: BigNumber(100) },
+            Vocal: { Vo: BigNumber(100), Da: BigNumber(0), Vi: BigNumber(0), Me: BigNumber(0) },
+            Center: { Vo: BigNumber(50), Da: BigNumber(50), Vi: BigNumber(50), Me: BigNumber(0) },
+            Dance: { Vo: BigNumber(0), Da: BigNumber(100), Vi: BigNumber(0), Me: BigNumber(0) },
+            Visual: { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(100), Me: BigNumber(0) }
         };
 
-        // ポジションごとに計算
+        // ポジションごとのステータスを計算
         positions.forEach(position => {
 
             // 思い出レベル
             const bomLevel = document.getElementById(`${position.toLowerCase()}MemoryLevel`).value;
             if (position !== "Center") {
-                switch (bomLevel) {
-                    case '1':
-                        memoryBonus += 0;
-                        break;
-                    case '2':
-                        memoryBonus += 0.02;
-                        break;
-                    case '3':
-                        memoryBonus += 0.03;
-                        break;
-                    case '4':
-                        memoryBonus += 0.05;
-                        break;
-                    case '5':
-                        memoryBonus += 0.075;
-                        break;
-                };
-            };
+                const memoryBonusMap = [BigNumber(0), BigNumber(0), BigNumber(0.02), BigNumber(0.03), BigNumber(0.05), BigNumber(0.075)];
+                memoryBonus = memoryBonus.plus(memoryBonusMap[parseInt(bomLevel)]);
+            }
 
             // ユニットボーナスの適用
-            const unitBonus = document.getElementById(`${position.toLowerCase()}-unitBonus`).checked ? 20 : 0;
+            const unitBonus = document.getElementById(`${position.toLowerCase()}UnitBonus`).checked ? BigNumber(20) : BigNumber(0);
 
-            // Vo、Da、Vi、Meごとに計算
+            // Vo、Da、Vi、Meごとステータスをに計算
             baseStats.forEach(baseStat => {
-                const initialBaseStat = parseInt(document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value);
+                const initialBaseStat = BigNumber(document.getElementById(`${position.toLowerCase()}-${baseStat.toLowerCase()}`).value);
 
-                // アビリティの計算
-                let baseStatIncrease = 0, // 基礎能力値UP系アビリティによる基礎能力値の増加量
-                    basePositionBonusMultiplier = 0, // アビリティによる基礎ポジションボーナス補正値
-                    allBaseStatsBonusMultiplier = 0,  // アビリティによる全基礎能力へのボーナス
-                    specificBaseStatBonusMultiplier = 0; // アビリティによる特定の基礎能力へのボーナス
+                // アビリティ処理(ステータス関連)
+                BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_CEIL }); // 切り上げ
+                let baseStatIncrease = BigNumber(0), // 基礎能力値UP系アビリティによる基礎能力値の増加量
+                    basePositionBonusMultiplier = BigNumber(0), // アビリティによる基礎ポジションボーナス補正値
+                    allBaseStatsBonusMultiplier = BigNumber(0),  // アビリティによる全基礎能力へのボーナス
+                    specificBaseStatBonusMultiplier = BigNumber(0); // アビリティによる特定の基礎能力へのボーナス
 
-                // アビリティを1個ずつ処理
-                document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
+                document.querySelectorAll(`.${position.toLowerCase()}Ability`).forEach(dropdown => {
                     const selectedOption = dropdown.options[dropdown.selectedIndex];
                     const type = selectedOption.getAttribute('data-type');
-                    const multiplier = parseFloat(selectedOption.getAttribute('data-multiplier'));
+                    const multiplier = BigNumber(selectedOption.getAttribute('data-multiplier'));
 
                     if (type !== "none") {
                         switch (type) {
                             case 'allBaseStatsUp': // 基礎能力値UP系
-                                baseStatIncrease += Math.ceil(calcDivide(calcMultiply(initialBaseStat, multiplier), 100));
+                                baseStatIncrease = baseStatIncrease.plus(initialBaseStat.times(multiplier).div(100).dp(0));
                                 break;
                             case 'basePositionBonus': // 基礎ポジションボーナス
                                 if (positionBonuses[position][baseStat] > 0) {
-                                    basePositionBonusMultiplier += multiplier;
+                                    basePositionBonusMultiplier = basePositionBonusMultiplier.plus(multiplier);
                                 }
                                 break;
                             case 'positionSuitability': // ポジション適正〇◎による基礎ポジションボーナス
                                 if (positionBonuses[position][baseStat] > 0) {
-                                    basePositionBonusMultiplier += position === "Center" ? (multiplier - 5) : multiplier;
+                                    basePositionBonusMultiplier = basePositionBonusMultiplier.plus(
+                                        position === "Center" ? multiplier.minus(5) : multiplier
+                                    );
                                 };
                                 break;
                             case 'vocalBasePositionBonus': // スペシャリスト（ボーカル）による基礎ポジションボーナス
                                 if (positionBonuses[position][baseStat] > 0 && position === "Vocal") {
-                                    basePositionBonusMultiplier += multiplier;
+                                    basePositionBonusMultiplier = basePositionBonusMultiplier.plus(multiplier);
                                 }
                                 break;
                             case 'allBaseStatsBonus': // 全基礎能力へのボーナス
-                                allBaseStatsBonusMultiplier += multiplier;
+                                allBaseStatsBonusMultiplier = allBaseStatsBonusMultiplier.plus(multiplier);
                                 break;
                             case `${baseStat.toLowerCase()}BaseStatBonus`: // 特定の基礎能力へのボーナス
-                                specificBaseStatBonusMultiplier += multiplier;
+                                specificBaseStatBonusMultiplier = specificBaseStatBonusMultiplier.plus(multiplier);
                                 break;
                             case 'roleModel': // ロールモデルによる全基礎能力へのボーナス
                                 if (position === "Leader") {
-                                    allBaseStatsBonusMultiplier += multiplier;
+                                    allBaseStatsBonusMultiplier = allBaseStatsBonusMultiplier.plus(multiplier);
                                 }
                                 break;
                         }
                     }
                 });
 
-                // ポジションごとの補正込み基礎能力値
-                const adjustedBaseStat = Math.ceil(calcDivide(calcMultiply((initialBaseStat + baseStatIncrease), (100 + positionBonuses[position][baseStat] + basePositionBonusMultiplier + allBaseStatsBonusMultiplier + specificBaseStatBonusMultiplier + unitBonus)), 100));
-                adjustedBaseStats[position][baseStat] = adjustedBaseStat;
-                document.getElementById(`adjusted-${position.toLowerCase()}-${baseStat.toLowerCase()}`).textContent = `${adjustedBaseStat.toLocaleString()}`;
+                // 補正込みステータスを計算
+                adjustedBaseStats[position][baseStat] = initialBaseStat.plus(baseStatIncrease);
+                const adjustedBaseStat = ((initialBaseStat.plus(baseStatIncrease)).times(BigNumber.sum(positionBonuses[position][baseStat], basePositionBonusMultiplier, allBaseStatsBonusMultiplier, specificBaseStatBonusMultiplier, unitBonus, 100)).div(100)).dp(0);
+                adjustedStats[position][baseStat] = adjustedBaseStat;
+                document.getElementById(`adjusted-${position.toLowerCase()}-${baseStat.toLowerCase()}`).textContent = `${Number(adjustedBaseStat).toLocaleString()}`;
 
                 // ユニット合計
-                unitTotalBaseStats[baseStat] = calcAdd(adjustedBaseStat, unitTotalBaseStats[baseStat]);
+                unitTotalStats[baseStat] = adjustedBaseStat.plus(unitTotalStats[baseStat]);
             });
 
         });
 
-        // フェスユニットの補正込み基礎能力値
+        // フェスユニット合計のステータスを計算(Me以外)
         baseStats.forEach(baseStat => {
             if (baseStat !== "Me") {
-                unitTotalBaseStats[baseStat] = Math.ceil(calcAdd(calcMultiply(Math.max(adjustedBaseStats.Leader[baseStat], adjustedBaseStats.Vocal[baseStat], adjustedBaseStats.Center[baseStat], adjustedBaseStats.Visual[baseStat], adjustedBaseStats.Dance[baseStat]), 1.5), calcMultiply(unitTotalBaseStats[baseStat], 0.5)));
+                const maxStat = BigNumber.max(
+                    adjustedStats.Leader[baseStat],
+                    adjustedStats.Vocal[baseStat],
+                    adjustedStats.Center[baseStat],
+                    adjustedStats.Visual[baseStat],
+                    adjustedStats.Dance[baseStat]
+                );
+                unitTotalStats[baseStat] = ((maxStat.times(1.5)).plus(unitTotalStats[baseStat].times(0.5))).dp(0);
             };
-            document.getElementById(`unitTotal${baseStat}`).textContent = `${unitTotalBaseStats[baseStat].toLocaleString()}`;
+            document.getElementById(`unitTotal${baseStat}`).textContent = `${Number(unitTotalStats[baseStat]).toLocaleString()}`;
         });
-        console.log(adjustedBaseStats);
-        console.log(unitTotalBaseStats);
+
+        // 残メンタル割合
+        const remainingMental = BigNumber(document.getElementById("currentMental").value); // 残メンタル
+        const mentalPercentage = BigNumber(remainingMental.div(unitTotalStats.Me)); // 残メンタル割合
+
+        // アビリティ処理(アピール値関連)
+        BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_CEIL }); // 切り上げ
+        let abilitiesBuff = BigNumber(0), // アビリティによるアピール値UP(%)
+            memoryGaugeIncrease = BigNumber(0); // 思い出ゲージ増加量(%)
+        positions.forEach(position => {
+            document.querySelectorAll(`.${position.toLowerCase()}Ability`).forEach(dropdown => {
+                const selectedOption = dropdown.options[dropdown.selectedIndex];
+                const type = selectedOption.getAttribute('data-type');
+                const multiplier = BigNumber(selectedOption.getAttribute('data-multiplier'));
+
+                if (type !== "none") {
+                    switch (type) {
+                        case 'appealScoreUp': // アピール値UP
+                            abilitiesBuff = abilitiesBuff.plus(multiplier);
+                            break;
+                        case 'mentalHigh': // 渾身系
+                            abilitiesBuff = abilitiesBuff.plus(multiplier.times(BigNumber.max(0.2, mentalPercentage.times(1.6).minus(0.6))));
+                            break;
+                        case 'mentalLow': // 背水系
+                            abilitiesBuff = abilitiesBuff.plus(multiplier.times(BigNumber(1).minus(mentalPercentage.times(0.8))));
+                            break;
+                        case 'mentalist': // メンタリスト
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber(5).times(BigNumber.max(0.2, (mentalPercentage.times(1.6).minus(0.6)))));
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber(10).times(BigNumber(1).minus(mentalPercentage.times(0.8))));
+                            break;
+
+                        case 'smileArena': // スマイルアリーナ
+                            if (Number(document.getElementById("hitCount").value) === 0) {
+                                abilitiesBuff = abilitiesBuff.plus(multiplier);
+                            }
+                            break;
+
+                        case 'startDash': // スタダ系
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.max(((multiplier.times(BigNumber(49).minus(turnCount.times(4)))).div(45)), (multiplier.div(5))));
+                            break;
+
+                        case 'slowStarter': // スロスタ系
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.min(((multiplier.times(BigNumber(5).plus(turnCount.times(4)))).div(45)), multiplier));
+                            break;
+
+                        case 'memoryHigh': // 思い出高系
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.min(multiplier, multiplier.times((BigNumber(1).div(5)).plus(turnStartUnitStats.MemoryGauge.times(4).div(500)))));
+                            break;
+
+                        case 'memoryLow': // 思い出低系
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.max(multiplier.div(5), multiplier.minus((turnStartUnitStats.MemoryGauge.times(multiplier.times(4))).div(500))));
+                            break;
+
+                        case 'romanticist': // ロマンチスト
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.min(BigNumber(10), BigNumber(10).times((BigNumber(1).div(5)).plus(turnStartUnitStats.MemoryGauge.times(4).div(500)))));
+                            memoryGaugeIncrease = memoryGaugeIncrease.plus(5);
+                            break;
+
+                        case 'twilights': // 思い出増加量UP&アピールUP(トワコレ)
+                            abilitiesBuff = abilitiesBuff.plus(3);
+                            memoryGaugeIncrease = memoryGaugeIncrease.plus(5);
+                            break;
+
+                        case 'memoryHighAndLow': // 思い出高&低
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.min(BigNumber(5), BigNumber(5).times((BigNumber(1).div(5)).plus(turnStartUnitStats.MemoryGauge.times(4).div(500)))));
+                            abilitiesBuff = abilitiesBuff.plus(BigNumber.max(BigNumber(10).div(5), BigNumber(10).minus((turnStartUnitStats.MemoryGauge.times(BigNumber(10).times(4))).div(500))));
+                            break;
+
+                        case 'memoryGaugeUp': // 思い出ゲージUP
+                            memoryGaugeIncrease = memoryGaugeIncrease.plus(multiplier);
+                            break;
+                    }
+                }
+            });
+        });
+
+        // 付与バフ
+        let activeBuff = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0) };
+        appealAttributes.forEach(attr => {
+            activeBuff[attr] = BigNumber(document.getElementById(`${attr.toLocaleLowerCase()}ActiveBuff`).value);
+        });
+
+        // 表示用バフ計算
+        BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR }); // 切り捨て
+        let displayBuff = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0) }; // 表示用バフ
+        appealAttributes.forEach(appealAttribute => {
+            const passiveBuff = BigNumber(document.getElementById(`${appealAttribute.toLocaleLowerCase()}PassiveBuff`).value);
+            const buffTotal = (passiveBuff.plus(activeBuff[appealAttribute]).plus(abilitiesBuff)).dp(0);
+            displayBuff[appealAttribute] = buffTotal;
+        });
+
+        // アピール値の表示を初期化
+        document.querySelectorAll(".appealScore").forEach(div => {
+            div.textContent = '';
+        });
+
+        // 思い出ボム本体と追加アピールの合計値
+        let memoryAppealScore = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0) };
+
+
+        // アピールスコア計算関数
+        function calculateAppealScore(appealType) {
+            // アピール開始
+
+            BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR }); // 切り捨て
+
+            // 累計アピール値
+            let accumulatedAppealScore = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0) };
+
+            // アピール判定
+            let appealCoefficient = BigNumber(document.getElementById(document.getElementById("tab1").checked ? "liveSkillCoefficient" : "memoryAppealCoefficient").value);
+
+            // ステータス計算
+
+            // 追加効果ごとのアピール値計算
+            const loopCount = appealType === "memoryAppealBom" ? 1 : numAdditionalEffectsAccordions;
+            for (let i = 1; i <= loopCount; i++) {
+                if (appealType === "memoryAppealBom" || (document.getElementById(`${appealType}AccordionCheckbox${i}`).checked && document.getElementById(`${appealType}AdditionalAppealButton${i}`).checked)) {
+
+                    // 強化属性
+                    const reinforcementAttribute = appealType !== "memoryAppealBom" ? document.getElementById(`${appealType}ReinforcementSelect${i}`).value : "none";
+
+                    // Vo,Da,Vi属性ごとのアピール値
+                    let attributeAppealValue = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0) };
+                    appealAttributes.forEach(appealAttribute => {
+                        const appealExecutorStatus = adjustedStats[appealExecutor][appealAttribute];
+                        const unitTotalStatus = BigNumber.sum(adjustedStats.Leader[appealAttribute], adjustedStats.Vocal[appealAttribute], adjustedStats.Center[appealAttribute], adjustedStats.Dance[appealAttribute], adjustedStats.Visual[appealAttribute]);
+                        const passiveBuff = BigNumber(document.getElementById(`${appealAttribute.toLocaleLowerCase()}PassiveBuff`).value);
+                        const reinforcementMultiplier = appealAttribute === reinforcementAttribute ? BigNumber(2) : BigNumber(1);
+                        const buffTotal = BigNumber.sum(passiveBuff, activeBuff[appealAttribute].times(reinforcementMultiplier), abilitiesBuff);
+                        console.log(buffTotal.toNumber())
+                        let appealMultiplier;
+                        const memoryBaseMultiplier = document.getElementById("centerMemoryLevel").value;
+                        appealMultiplier = (appealType === "memoryAppealBom")
+                            ? {
+                                "1": BigNumber(0.8),
+                                "2": BigNumber(1.0),
+                                "3": BigNumber(1.2),
+                                "4": BigNumber(1.4),
+                                "5": BigNumber(2.0)
+                            }[memoryBaseMultiplier]
+                            : BigNumber(document.getElementById(`${appealType}${appealAttribute}AppealMultiplier${i}`).value);
+                        const fesAppealBaseValue = appealExecutorStatus.times(1.5).plus(unitTotalStatus.times(0.5));
+                        const baseCoefficient = ((fesAppealBaseValue.times((buffTotal.plus(100)).div(100))).times(appealCoefficient)).dp(0);
+                        const appealScore = (appealType === "memoryAppealBom")
+                            ? ((baseCoefficient.times(appealMultiplier)).dp(0).times(memoryBonus)).dp(0)
+                            : (baseCoefficient.times(appealMultiplier)).dp(0);
+
+                        attributeAppealValue[appealAttribute] = attributeAppealValue[appealAttribute].plus(appealScore);
+                    });
+
+                    // Vo,Da,Viアピール合算
+                    let totalAppealScore = { Vo: BigNumber(0), Da: BigNumber(0), Vi: BigNumber(0) }; // 単一の追加効果によるアピール値
+                    if (appealType === "memoryAppealBom" || appealType === "memoryAppeal" || document.getElementById(`${appealType}Target${i}`).checked) {
+                        // 全体アピール
+                        appealAttributes.forEach(attr => {
+                            totalAppealScore[attr] = BigNumber.sum(totalAppealScore[attr], attributeAppealValue[attr], attributeAppealValue.Vo, attributeAppealValue.Da, attributeAppealValue.Vi);
+                        });
+                    } else {
+                        // 個別に
+                        const targetAttr = document.getElementById("appealTarget").value;
+                        appealAttributes.forEach(attr => {
+                            totalAppealScore[attr] = totalAppealScore[attr].plus(attributeAppealValue[attr].times(attr === targetAttr ? BigNumber(2) : BigNumber(1)));
+                        });
+                    }
+
+                    // 追加効果ごとのアピール値を合計
+                    console.log(appealType, totalAppealScore)
+                    appealAttributes.forEach(attr => {
+                        accumulatedAppealScore[attr] = accumulatedAppealScore[attr].plus(totalAppealScore[attr]);
+                    });
+
+                }
+            };
+
+            // 追加効果ごとのバフ計算
+            if (appealType !== "memoryAppealBom") {
+                for (let i = 1; i <= numAdditionalEffectsAccordions; i++) {
+                    if (document.getElementById(`${appealType}AccordionCheckbox${i}`).checked && document.getElementById(`${appealType}BuffGrantButton${i}`).checked)
+                        appealAttributes.forEach(appealAttribute => {
+                            activeBuff[appealAttribute] = activeBuff[appealAttribute].plus(BigNumber(document.getElementById(`${appealType}${appealAttribute}Increase${i}`).value))
+                        })
+                }
+            }
+
+            // アピール値を表示(思い出アピールはボム本体と追加効果の合計値を表示)
+            if (appealType === "memoryAppealBom" || appealType === "memoryAppeal") {
+                appealAttributes.forEach(attr => {
+                    memoryAppealScore[attr] = memoryAppealScore[attr].plus(accumulatedAppealScore[attr]); // スコアの加算
+                    document.getElementById(`memoryAppeal${attr}Score`).textContent = `/${Number(memoryAppealScore[attr]).toLocaleString()}`; // スコアの更新
+                });
+            } else {
+                appealAttributes.forEach(attr => {
+                    document.getElementById(`${appealType}${attr}Score`).textContent = `/${Number(accumulatedAppealScore[attr]).toLocaleString()}`; // スコアの更新
+                });
+            }
+
+        };
+
+
+        if (document.getElementById("tab1").checked) {
+            // 通常アピール
+
+            // 通常アピールの追加効果
+            calculateAppealScore("liveSkill");
+
+            // 通常アピールのLinkアピール
+            if (document.getElementById("linkAppealcheckbox").checked) {
+
+                // 通常アピールのLinkアピールの追加効果
+                calculateAppealScore("linkAppeal");
+            };
+
+        } else {
+            // 思い出アピール
+            calculateAppealScore("memoryAppealBom");
+
+            // 思い出アピールの追加効果
+            calculateAppealScore("memoryAppeal");
+
+            // 思い出アピールのLinkアピール
+            if (document.getElementById("memorylLinkAppealcheckbox").checked) {
+                calculateAppealScore("memoryLinkAppeal");
+            };
+
+            // チャージアピールのLinkアピール
+            if (document.getElementById("chargeAppealcheckbox").checked) {
+                calculateAppealScore("chargeAppeal");
+            };
+        }
+
+        // 表示
+        appealAttributes.forEach(appealAttribute => {
+            // アピールポジションのステータス表示
+            document.getElementById(`appealExecutorStatus${appealAttribute}`).textContent = adjustedBaseStats[appealExecutor][appealAttribute];
+
+            // バフ表示
+            document.getElementById(`displayBuff${appealAttribute}`).textContent = `${displayBuff[appealAttribute]}%`;
+        });
     };
 
+    // 保存・読み込み用
+    const fields = [
+        "turnCount",
+        "currentMemoryGauge",
+        "currentMental",
+        "currentEvasionRate",
+        "hitCount",
+        "healCount",
+        "voPassiveBuff",
+        "daPassiveBuff",
+        "viPassiveBuff",
+        "voActiveBuff",
+        "daActiveBuff",
+        "viActiveBuff"
+    ];
 
     // JSONとして保存
     function saveFormData() {
-        const userConfirmed = confirm("この内容でデータをファイルに保存しますか？");
+        const userConfirmed = confirm("入力したデータをJSON形式でダウンロードしますか？");
 
         if (userConfirmed) {
             // JSON形式でデータを構成
-            let data = { appInfo: {}, appData: { idols: {} } };
+            let data = { appInfo: {}, appData: { idols: {}, scene: {}, appeal: {} } };
 
             // アプリ情報
             data.appInfo = { appName: "グレフェス計算機", version: `${appVersion}` };
@@ -793,15 +1709,21 @@
                         Me: parseInt(document.getElementById(`${position.toLowerCase()}-me`).value)
                     },
                     abilities: [],
-                    unitBonus: document.getElementById(`${position.toLowerCase()}-unitBonus`).checked
+                    unitBonus: document.getElementById(`${position.toLowerCase()}UnitBonus`).checked
                 };
 
                 // アビリティ
-                document.querySelectorAll(`.${position.toLowerCase()}-ability`).forEach(dropdown => {
+                document.querySelectorAll(`.${position.toLowerCase()}Ability`).forEach(dropdown => {
                     const selectedOption = dropdown.options[dropdown.selectedIndex];
                     const value = selectedOption.value;
                     data.appData.idols[position]["abilities"].push(value);
                 });
+            });
+
+            // シーン設定
+            fields.forEach(field => {
+                const value = document.getElementById(field).value;
+                data.appData.scene[field] = value;
             });
 
             // ファイルとして保存
@@ -816,6 +1738,7 @@
     }
 
 
+
     // JSONを読み込む
     function loadFormData() {
         const fileInput = document.createElement("input");
@@ -827,6 +1750,8 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const data = JSON.parse(e.target.result);
+
+                    // ステータス
                     positions.forEach(position => {
                         // 思い出レベル
                         document.getElementById(`${position.toLowerCase()}MemoryLevel`).value = data.appData.idols[position].memoryLevel || 1;
@@ -839,7 +1764,7 @@
 
                         // アビリティ
                         for (let i = 0; i < numAbilities; i++) {
-                            const selectBox = document.getElementById(`${position.toLowerCase()}-ability-${i}`);
+                            const selectBox = document.getElementById(`${position.toLowerCase()}Ability${i}`);
                             const abilityValue = data.appData.idols[position].abilities[i];
 
                             // 選択肢の中に abilityValueが存在するかを確認
@@ -852,8 +1777,16 @@
                         };
 
                         // ユニットボーナス
-                        document.getElementById(`${position.toLowerCase()}-unitBonus`).checked = data.appData.idols[position].unitBonus || false;
+                        document.getElementById(`${position.toLowerCase()}UnitBonus`).checked = data.appData.idols[position].unitBonus || false;
                     });
+
+                    // シーン設定
+                    fields.forEach(field => {
+                        const value = data.appData.scene[field] || 0;
+                        document.getElementById(field).value = value;
+                    });
+
+                    // 計算を実行
                     calculateStatus();
                 };
                 reader.readAsText(file);
